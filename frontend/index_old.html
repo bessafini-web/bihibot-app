@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BihiApp OS v4.0</title>
+<meta name="theme-color" content="#080B12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080B12;--bg2:#0D1220;--bg3:#141A2E;--bg4:#1a2035;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --bronze:#A87B45;--bronze-lt:#BF9260;--bronze-dim:rgba(168,123,69,0.15);
+  --white:#FFFFFF;--gray:rgba(255,255,255,0.55);--gray2:rgba(255,255,255,0.25);
+  --green:#4ade80;--red:#f87171;--blue:#60a5fa;--yellow:#fbbf24;
+}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;overflow:hidden}
+
+/* ── Login ── */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{width:320px;text-align:center}
+.login-logo{font-size:13px;font-weight:700;letter-spacing:4px;color:var(--bronze);margin-bottom:8px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--gray2);margin-bottom:32px;letter-spacing:1px}
+.login-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:10px;padding:13px 16px;color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;text-align:center;letter-spacing:3px;margin-bottom:12px;transition:border-color .2s}
+.login-input:focus{border-color:rgba(168,123,69,0.5)}
+.login-btn{width:100%;background:var(--bronze);border:none;border-radius:10px;padding:13px;color:#080B12;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .2s}
+.login-btn:hover{opacity:.85}
+.login-err{font-size:12px;color:var(--red);margin-top:8px;display:none}
+
+/* ── App ── */
+#app{display:none;height:100%;flex-direction:column}
+#app.visible{display:flex}
+
+/* ── Header ── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hdr-name{font-size:14px;font-weight:700;letter-spacing:3px}
+.hdr-name span{color:var(--bronze)}
+.hdr-sub{font-size:10px;color:var(--gray2);letter-spacing:.8px}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.hdr-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--gray);padding:5px 10px;border-radius:7px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s}
+.hdr-btn:hover{background:rgba(255,255,255,0.08);color:var(--white)}
+.hdr-shield{background:rgba(74,222,128,0.1);border-color:rgba(74,222,128,0.2);color:var(--green)}
+
+/* ── Tabs ── */
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--gray);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;transition:all .2s}
+.tab.on{color:var(--white);border-bottom-color:var(--bronze)}
+</style>
+</head>
+<body>
+
+<style>
+/* ── Panels ── */
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden}
+.panel.on{display:flex}
+
+/* ── Chat Panel ── */
+.quick{display:flex;gap:7px;padding:10px 16px;overflow-x:auto;flex-shrink:0;border-bottom:1px solid var(--border);scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.qbtn{flex-shrink:0;padding:5px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--gray);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.qbtn:hover{background:var(--bronze-dim);border-color:rgba(168,123,69,.35);color:var(--white)}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent}
+.msg{display:flex;gap:8px;max-width:88%;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg.bot{align-self:flex-start}
+.av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px}
+.msg.bot .av{background:rgba(168,123,69,.1);border:1px solid rgba(168,123,69,.25)}
+.msg.user .av{background:rgba(255,255,255,.05);border:1px solid var(--border)}
+.bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.75}
+.msg.bot .bubble{background:var(--bg2);border:1px solid var(--border);border-bottom-left-radius:3px;color:rgba(255,255,255,.88)}
+.msg.user .bubble{background:#1a2540;border:1px solid rgba(168,123,69,.18);border-bottom-right-radius:3px}
+.dots{display:flex;gap:4px;align-items:center;padding:2px 0}
+.dots span{width:5px;height:5px;background:var(--bronze);border-radius:50%;animation:bounce 1.2s infinite;opacity:.5}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.inp-wrap{padding:11px 16px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
+.inp-row{display:flex;gap:8px;align-items:flex-end;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:11px;padding:9px 13px;transition:border-color .2s}
+.inp-row:focus-within{border-color:rgba(168,123,69,.4)}
+#inp{flex:1;background:none;border:none;color:var(--white);font-size:14px;font-family:inherit;resize:none;outline:none;max-height:100px;line-height:1.55;scrollbar-width:none}
+#inp::placeholder{color:var(--gray2)}
+.send{width:34px;height:34px;background:var(--bronze);border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s}
+.send:hover{opacity:.8}.send:disabled{opacity:.3;cursor:not-allowed}
+.send svg{width:14px;height:14px;fill:white}
+.welcome{text-align:center;padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.welcome-icon{font-size:40px;margin-bottom:4px}
+.welcome h2{font-size:18px;font-weight:600}
+.welcome p{font-size:12px;color:var(--gray2);line-height:1.6;max-width:260px}
+
+/* ── Dashboard Panel ── */
+.dash{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.stat-val{font-size:22px;font-weight:700;color:var(--bronze);font-family:'Cormorant Garamond',serif;line-height:1}
+.stat-lbl{font-size:10px;color:var(--gray2);letter-spacing:.6px;text-transform:uppercase;margin-top:4px}
+.section-hdr{font-size:10px;color:var(--bronze);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-top:4px}
+.card-list{display:flex;flex-direction:column;gap:6px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s}
+.card:hover{border-color:rgba(168,123,69,.3)}
+.card-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.card-body{flex:1;min-width:0}
+.card-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-sub{font-size:11px;color:var(--gray2);margin-top:2px}
+.card-tag{font-size:10px;padding:3px 8px;border-radius:12px;flex-shrink:0}
+.empty{text-align:center;padding:24px;color:var(--gray2);font-size:12px}
+
+/* ── Actions Panel ── */
+.actions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:16px}
+.action-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:16px;cursor:pointer;transition:all .2s;text-align:center}
+.action-card:hover{border-color:rgba(168,123,69,.4);background:var(--bg3)}
+.action-icon{font-size:24px;margin-bottom:8px}
+.action-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.action-desc{font-size:11px;color:var(--gray2);line-height:1.5}
+</style>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">BIHIAPP OS</div>
+    <div class="login-title">Ibrahim Essafini</div>
+    <div class="login-sub">Assistant Privé · Viresta · Tanger</div>
+    <input class="login-input" type="password" id="pwd" placeholder="••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">ACCÉDER</button>
+    <div class="login-err" id="login-err">Mot de passe incorrect</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- Header -->
+  <div class="hdr">
+    <div class="hdr-brand">
+      <div class="hdr-dot"></div>
+      <div>
+        <div class="hdr-name">BIHI<span>APP</span> OS <span style="font-size:10px;opacity:.5">v4.0</span></div>
+        <div class="hdr-sub">Dynamo · 5 Agents · 19 Sheets</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <button class="hdr-btn hdr-shield" onclick="sendAction('shield_status')">🛡 Shield</button>
+      <button class="hdr-btn" onclick="sendAction('weekly')">📋 Weekly</button>
+      <button class="hdr-btn" onclick="clearChat()" title="Clear chat">✕</button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab on" id="tab-chat" onclick="switchTab('chat')">💬 Chat</button>
+    <button class="tab" id="tab-dash" onclick="switchTab('dash')">📊 Dashboard</button>
+    <button class="tab" id="tab-actions" onclick="switchTab('actions')">⚡ Actions</button>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div class="panel on" id="panel-chat">
+    <div class="quick">
+      <button class="qbtn" onclick="send('scout terrain investisseur Tanger 2025')">🔍 Scout</button>
+      <button class="qbtn" onclick="send('ecommerce produit tendance 2025')">🛒 E-Commerce</button>
+      <button class="qbtn" onclick="send('export Maroc opportunite')">📦 Export</button>
+      <button class="qbtn" onclick="send('legal SPA Maroc associes etrangers')">⚖️ Legal</button>
+      <button class="qbtn" onclick="send('social scout TikTok trending')">📱 Social</button>
+      <button class="qbtn" onclick="send('trading signal crypto Maroc')">📈 Trading</button>
+      <button class="qbtn" onclick="send('alerts')">🚨 Alertes</button>
+      <button class="qbtn" onclick="send('status')">⚙️ Status</button>
+    </div>
+    <div class="msgs" id="msgs">
+      <div class="welcome">
+        <div class="welcome-icon">🤖</div>
+        <h2>BihiApp OS v4.0</h2>
+        <p>Nsma3 w nfahem — kteb liya ay haja b darija, français, wla 3rbiya</p>
+      </div>
+    </div>
+    <div class="inp-wrap">
+      <div class="inp-row">
+        <textarea id="inp" rows="1" placeholder="Kteb liya..." onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+        <button class="send" id="sbtn" onclick="send()">
+          <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PANEL -->
+  <div class="panel" id="panel-dash">
+    <div class="dash" id="dash-content">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val" id="s-inv">—</div><div class="stat-lbl">Investors</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-ops">—</div><div class="stat-lbl">Dossiers</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-hot">—</div><div class="stat-lbl">High Priority</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-new">—</div><div class="stat-lbl">Nouveaux</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-alr">—</div><div class="stat-lbl">Alertes</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-ilm">—</div><div class="stat-lbl">ILM Rules</div></div>
+      </div>
+      <div class="section-hdr">Investors CRM</div>
+      <div class="card-list" id="inv-list"><div class="empty">Chargement...</div></div>
+      <div class="section-hdr">Dossiers Actifs</div>
+      <div class="card-list" id="ops-list"><div class="empty">Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ACTIONS PANEL -->
+  <div class="panel" id="panel-actions">
+    <div class="actions-grid">
+      <div class="action-card" onclick="goChat('scout terrain industriel Tanger Kenitra 3 opportunites concretes')"><div class="action-icon">🔍</div><div class="action-title">Scout Terrain</div><div class="action-desc">Zaeer scanne les opportunités foncières</div></div>
+      <div class="action-card" onclick="goChat('ecommerce produit dropshipping tendance 2025 Maroc')"><div class="action-icon">🛒</div><div class="action-title">E-Commerce</div><div class="action-desc">Produit tendance + analyse marché</div></div>
+      <div class="action-card" onclick="goChat('export produit marocain buyers internationaux')"><div class="action-icon">📦</div><div class="action-title">Export Match</div><div class="action-desc">Match produits Maroc ↔ acheteurs</div></div>
+      <div class="action-card" onclick="goChat('draft email investor europeen terrain industriel Tanger')"><div class="action-icon">✉️</div><div class="action-title">Draft Email</div><div class="action-desc">Wassi rédige un email pro Viresta</div></div>
+      <div class="action-card" onclick="goChat('legal SPA Maroc investisseurs etrangers capital minimum')"><div class="action-icon">⚖️</div><div class="action-title">Legal Check</div><div class="action-desc">Moteur légal — loi foncière Maroc</div></div>
+      <div class="action-card" onclick="goChat('social scout LinkedIn TikTok investors Morocco 2025')"><div class="action-icon">📱</div><div class="action-title">Social Scout</div><div class="action-desc">Signaux investisseurs réseaux sociaux</div></div>
+      <div class="action-card" onclick="goChat('weekly rapport intelligence marche Viresta')"><div class="action-icon">📋</div><div class="action-title">Weekly Report</div><div class="action-desc">Rapport hebdomadaire automatique</div></div>
+      <div class="action-card" onclick="goChat('status')"><div class="action-icon">⚙️</div><div class="action-title">System Status</div><div class="action-desc">État de tous les agents</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000';
+let TOKEN = '', hist = [];
+
+// ── Login ──────────────────────────────────────────────────────────
+async function doLogin() {
+  const pwd = document.getElementById('pwd').value.trim();
+  if (!pwd) return;
+  try {
+    const r = await fetch(`${API}/login`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({password: pwd})
+    });
+    if (r.ok) {
+      const d = await r.json();
+      TOKEN = d.token;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').classList.add('visible');
+      loadDashboard();
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+    }
+  } catch {
+    TOKEN = pwd;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+  }
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.getElementById('tab-' + t).classList.add('on');
+  document.getElementById('panel-' + t).classList.add('on');
+  if (t === 'dash') loadDashboard();
+}
+
+// ── Chat ───────────────────────────────────────────────────────────
+async function send(text) {
+  const inp = document.getElementById('inp');
+  const msg = text || inp.value.trim();
+  if (!msg) return;
+  if (!text) { inp.value = ''; resize(inp); }
+  addMsg('user', msg);
+  hist.push({role: 'user', content: msg});
+  const tid = typing();
+  document.getElementById('sbtn').disabled = true;
+  try {
+    const r = await fetch(`${API}/chat`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}`},
+      body: JSON.stringify({messages: hist})
+    });
+    rmTyping(tid);
+    if (r.ok) {
+      const d = await r.json();
+      addMsg('bot', d.reply);
+      hist.push({role: 'assistant', content: d.reply});
+      if (hist.length > 30) hist = hist.slice(-30);
+    } else {
+      addMsg('bot', '❌ Erreur serveur — ' + r.status);
+    }
+  } catch {
+    rmTyping(tid);
+    addMsg('bot', '⚠️ Backend déconnecté — lance start.bat');
+  }
+  document.getElementById('sbtn').disabled = false;
+}
+
+async function sendAction(action) {
+  switchTab('chat');
+  addMsg('user', '/' + action);
+  hist.push({role: 'user', content: action});
+  const tid = typing();
+  try {
+    const r = await fetch(`${API}/chat`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}`},
+      body: JSON.stringify({messages: [{role: 'user', content: action}], action})
+    });
+    rmTyping(tid);
+    if (r.ok) { const d = await r.json(); addMsg('bot', d.reply); }
+  } catch { rmTyping(tid); addMsg('bot', '⚠️ Erreur'); }
+}
+
+function goChat(msg) { switchTab('chat'); send(msg); }
+
+function addMsg(role, content) {
+  const c = document.getElementById('msgs');
+  const w = c.querySelector('.welcome'); if (w) w.remove();
+  const d = document.createElement('div'); d.className = 'msg ' + role;
+  d.innerHTML = `<div class="av">${role === 'bot' ? '🤖' : '👤'}</div><div class="bubble">${fmt(content)}</div>`;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+
+function typing() {
+  const c = document.getElementById('msgs'); const id = 'tp' + Date.now();
+  const d = document.createElement('div'); d.id = id; d.className = 'msg bot';
+  d.innerHTML = `<div class="av">🤖</div><div class="bubble"><div class="dots"><span></span><span></span><span></span></div></div>`;
+  c.appendChild(d); c.scrollTop = c.scrollHeight; return id;
+}
+function rmTyping(id) { const e = document.getElementById(id); if (e) e.remove(); }
+
+function clearChat() {
+  hist = [];
+  document.getElementById('msgs').innerHTML = `<div class="welcome"><div class="welcome-icon">🤖</div><h2>BihiApp OS v4.0</h2><p>Nsma3 w nfahem — kteb liya ay haja b darija, français, wla 3rbiya</p></div>`;
+}
+
+function onKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
+function resize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
+
+// ── Dashboard ──────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const r = await fetch(`${API}/data/summary`, {headers: {'Authorization': `Bearer ${TOKEN}`}});
+    if (r.ok) {
+      const d = await r.json();
+      document.getElementById('s-inv').textContent = d.investors_active ?? '—';
+      document.getElementById('s-ops').textContent = d.opportunities_total ?? '—';
+      document.getElementById('s-hot').textContent = d.opportunities_high ?? '—';
+      document.getElementById('s-new').textContent = d.opportunities_new ?? '—';
+      document.getElementById('s-alr').textContent = d.alerts_pending ?? '—';
+      document.getElementById('s-ilm').textContent = d.ilm_rules ?? '—';
+      loadInvestors(); loadOpportunities();
+    }
+  } catch { }
+}
+
+async function loadInvestors() {
+  try {
+    const r = await fetch(`${API}/data/investors`, {headers: {'Authorization': `Bearer ${TOKEN}`}});
+    if (!r.ok) return;
+    const d = await r.json();
+    const list = document.getElementById('inv-list');
+    if (!d.investors?.length) { list.innerHTML = '<div class="empty">Aucun investisseur actif</div>'; return; }
+    list.innerHTML = d.investors.slice(0, 8).map(i => {
+      const s = parseInt(i.Trust_Score) || 0;
+      const c = s >= 80 ? 'var(--green)' : s >= 60 ? 'var(--yellow)' : 'var(--gray2)';
+      return `<div class="card" onclick="goChat('Analyse investisseur ${(i.Name||'').replace(/'/g,"\\'")} ${i.Country||''} secteur ${i.Sector||''}')">
+        <div class="card-dot" style="background:${c}"></div>
+        <div class="card-body"><div class="card-title">${i.Name||'Inconnu'}</div><div class="card-sub">${i.Country||''} · ${i.Sector||''}</div></div>
+        <div class="card-tag" style="background:rgba(168,123,69,.1);color:var(--bronze)">${i.Trust_Score||'?'}/100</div>
+      </div>`;
+    }).join('');
+  } catch { }
+}
+
+async function loadOpportunities() {
+  try {
+    const r = await fetch(`${API}/data/opportunities`, {headers: {'Authorization': `Bearer ${TOKEN}`}});
+    if (!r.ok) return;
+    const d = await r.json();
+    const list = document.getElementById('ops-list');
+    if (!d.opportunities?.length) { list.innerHTML = '<div class="empty">Aucun dossier actif</div>'; return; }
+    list.innerHTML = d.opportunities.slice(0, 8).map(o => {
+      const isH = o.Priority === 'High', isN = o.Status === 'New';
+      const c = isH ? 'var(--bronze)' : isN ? 'var(--blue)' : 'var(--gray2)';
+      const tag = isH ? '🔥 High' : isN ? '✨ New' : o.Status || '—';
+      return `<div class="card" onclick="goChat('Analyse dossier ${(o.Title||'').replace(/'/g,"\\'")} secteur ${o.Sector||''}')">
+        <div class="card-dot" style="background:${c}"></div>
+        <div class="card-body"><div class="card-title">${o.Title||'Sans titre'}</div><div class="card-sub">${o.Sector||''} · Trust ${o.Trust_Score||'?'} · Risk ${o.Risk_Score||'?'}</div></div>
+        <div class="card-tag" style="background:rgba(168,123,69,.1);color:var(--bronze)">${tag}</div>
+      </div>`;
+    }).join('');
+  } catch { }
+}
+
+// ── Utils ──────────────────────────────────────────────────────────
+function fmt(t) {
+  return (t||'')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.*?)`/g, '<code style="background:rgba(255,255,255,.08);padding:2px 5px;border-radius:3px;font-size:12px;font-family:monospace">$1</code>')
+    .replace(/\n/g, '<br>');
+}
+</script>
+</body>
+</html>
