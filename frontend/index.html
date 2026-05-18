@@ -457,7 +457,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   </div>
 </div>
 <script>
-const API=location.hostname==='localhost'?'http://localhost:8000':'https://inra-bihibot-cloud.hf.space';
+const API=location.hostname==='localhost'?'http://localhost:8000':'https://inra-bihibot-app.hf.space';
 let TK='',hist=[],isRec=false,voiceOn=true,synth=window.speechSynthesis;
 let mediaRec=null,audioChunks=[];
 setInterval(()=>{document.getElementById('clk').textContent=new Date().toTimeString().slice(0,8);},1000);
