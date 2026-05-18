@@ -543,7 +543,7 @@ function rsz(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight
 let audioCtx2=null,analyser2=null,silStart=null;
 let isLive=false,liveStr=null,lChunks=[],lRec=null;
 let lSpeaking=false,lProcessing=false;
-const MIN_VOL=22,SIL_MS=2000;
+const MIN_VOL=30,SIL_MS=1000;
 
 function toggleVoice(){isLive?stopLive():startLive();}
 
