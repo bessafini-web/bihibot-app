@@ -641,7 +641,7 @@ function speak(text){
 
 async function speakPremium(text){
   const raw=text||(lastReply||'');
-  const clean=raw.replace(/<[^>]+>/g,'').replace(/[*`#]/g,'').replace(/\/\/.*/g,'').trim().slice(0,500);
+  const clean=raw.replace(/<[^>]+>/g,'').replace(/[*`#]/g,'').replace(/\/\/.*/g,'').trim().slice(0,200);
   if(clean.length<2)return;
   const btn=document.getElementById('vbtn');
   synth.cancel();
@@ -649,7 +649,7 @@ async function speakPremium(text){
     const r=await fetch(`${API}/tts`,{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${TK}`},
-      body:JSON.stringify({text:clean})
+      body:JSON.stringify({text:clean,lang:lastLang})
     });
     if(r.ok&&r.headers.get('content-type')?.includes('audio')){
       const blob=await r.blob();
@@ -657,10 +657,10 @@ async function speakPremium(text){
       const audio=new Audio(url);
       if(btn)btn.textContent='🔊';
       audio.onended=()=>{URL.revokeObjectURL(url);if(btn&&!isLive)btn.textContent='🎙';};
-      audio.onerror=()=>{speak(clean);};
+      audio.onerror=()=>{speak(raw);};
       audio.play();
-    }else speak(clean);
-  }catch{speak(clean);}
+    }else speak(raw);
+  }catch{speak(raw);}
 }
 
 function handleMsgsClick(e){
