@@ -278,42 +278,66 @@ async def transcribe(audio: UploadFile = File(...), lang: str = "ar", token=Depe
     except Exception as e:
         return {"text": "", "ok": False, "error": str(e)}
 
-# ── Groq Orpheus TTS ───────────────────────────────────────
+# ── TTS: Groq Orpheus (FR) + OpenAI onyx (AR) ─────────────
 @app.post("/tts")
 async def tts(request: Request, token=Depends(auth)):
-    GROQ_KEY = os.getenv("GROQ_API_KEY", "")
+    GROQ_KEY   = os.getenv("GROQ_API_KEY", "")
+    OPENAI_KEY = os.getenv("OPENAI_API_KEY", "")
     try:
         body = await request.json()
-        text = body.get("text", "").strip()[:200]  # Orpheus limit: 200 chars
+        text = body.get("text", "").strip()[:400]
         lang = body.get("lang", "french").lower()
         if not text:
             return {"ok": False, "error": "No text"}
-        # Select model and voice by language
-        if lang == "arabic":
-            model = "canopylabs/orpheus-arabic-saudi"
-            voice = "sultan"
+
+        from fastapi.responses import Response
+
+        # ── Arabic → OpenAI onyx ──────────────────────────────
+        if lang in ("arabic", "ar", "darija"):
+            if not OPENAI_KEY:
+                return {"ok": False, "error": "OPENAI_API_KEY not set"}
+            async with httpx.AsyncClient(timeout=30) as client:
+                r = await client.post(
+                    "https://api.openai.com/v1/audio/speech",
+                    headers={
+                        "Authorization": f"Bearer {OPENAI_KEY}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": "tts-1",
+                        "voice": "onyx",
+                        "input": text,
+                        "response_format": "mp3",
+                    }
+                )
+            if r.status_code == 200:
+                return Response(content=r.content, media_type="audio/mpeg")
+            else:
+                return {"ok": False, "error": f"OpenAI TTS: {r.text}"}
+
+        # ── French / Other → Groq playai-tts Fritz ───────────
         else:
-            model = "canopylabs/orpheus-v1-english"
-            voice = "troy"
-        async with httpx.AsyncClient(timeout=30) as client:
-            r = await client.post(
-                "https://api.groq.com/openai/v1/audio/speech",
-                headers={
-                    "Authorization": f"Bearer {GROQ_KEY}",
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "model": model,
-                    "voice": voice,
-                    "input": text,
-                    "response_format": "wav",
-                }
-            )
-        if r.status_code == 200:
-            from fastapi.responses import Response
-            return Response(content=r.content, media_type="audio/wav")
-        else:
-            return {"ok": False, "error": r.text}
+            if not GROQ_KEY:
+                return {"ok": False, "error": "GROQ_API_KEY not set"}
+            async with httpx.AsyncClient(timeout=30) as client:
+                r = await client.post(
+                    "https://api.groq.com/openai/v1/audio/speech",
+                    headers={
+                        "Authorization": f"Bearer {GROQ_KEY}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": "playai-tts",
+                        "voice": "Fritz-PlayAI",
+                        "input": text[:200],
+                        "response_format": "wav",
+                    }
+                )
+            if r.status_code == 200:
+                return Response(content=r.content, media_type="audio/wav")
+            else:
+                return {"ok": False, "error": f"Groq TTS: {r.text}"}
+
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
