@@ -278,32 +278,26 @@ async def transcribe(audio: UploadFile = File(...), lang: str = "ar", token=Depe
     except Exception as e:
         return {"text": "", "ok": False, "error": str(e)}
 
-# ── ElevenLabs TTS ─────────────────────────────────────────
+# ── OpenAI TTS ─────────────────────────────────────────────
 @app.post("/tts")
 async def tts(request: Request, token=Depends(auth)):
-    ELEVEN_KEY = "sk_00b999c90639bd5e1f983d3dc534e9d37f6aa61b27b15b56"
-    VOICE_ID = "TX3LPaxmHKxFdv7VOQHJ"  # Liam — voix masculine naturelle
+    OPENAI_KEY = os.getenv("OPENAI_API_KEY", "")
     try:
         body = await request.json()
         text = body.get("text", "").strip()[:500]
         if not text:
             return {"ok": False, "error": "No text"}
-        async with httpx.AsyncClient(timeout=15) as client:
+        async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(
-                f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}",
+                "https://api.openai.com/v1/audio/speech",
                 headers={
-                    "xi-api-key": ELEVEN_KEY,
-                    "Content-Type": "application/json"
+                    "Authorization": f"Bearer {OPENAI_KEY}",
+                    "Content-Type": "application/json",
                 },
                 json={
-                    "text": text,
-                    "model_id": "eleven_flash_v2_5",
-                    "voice_settings": {
-                        "stability": 0.5,
-                        "similarity_boost": 0.75,
-                        "style": 0.3,
-                        "use_speaker_boost": True
-                    }
+                    "model": "tts-1",
+                    "voice": "onyx",
+                    "input": text,
                 }
             )
         if r.status_code == 200:
@@ -313,3 +307,25 @@ async def tts(request: Request, token=Depends(auth)):
             return {"ok": False, "error": r.text}
     except Exception as e:
         return {"ok": False, "error": str(e)}
+
+# ── Setup DB ───────────────────────────────────────────────────────
+@app.post("/setup")
+async def setup_db(token=Depends(auth)):
+    try:
+        from db import setup_all_sheets
+        setup_all_sheets()
+        return {"ok": True, "message": "19 sheets created/verified"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ── Debug sheets ────────────────────────────────────────────────────
+@app.get("/debug/sheets")
+async def debug_sheets(token=Depends(auth)):
+    try:
+        from db import _init, _spreadsheet, GOOGLE_SHEET_ID
+        _init()
+        import db as _db
+        sheets = [ws.title for ws in _db._spreadsheet.worksheets()]
+        return {"sheet_id": GOOGLE_SHEET_ID, "sheets": sheets, "count": len(sheets)}
+    except Exception as e:
+        return {"error": str(e)}
