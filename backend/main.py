@@ -278,31 +278,40 @@ async def transcribe(audio: UploadFile = File(...), lang: str = "ar", token=Depe
     except Exception as e:
         return {"text": "", "ok": False, "error": str(e)}
 
-# ── OpenAI TTS ─────────────────────────────────────────────
+# ── Groq Orpheus TTS ───────────────────────────────────────
 @app.post("/tts")
 async def tts(request: Request, token=Depends(auth)):
-    OPENAI_KEY = os.getenv("OPENAI_API_KEY", "")
+    GROQ_KEY = os.getenv("GROQ_API_KEY", "")
     try:
         body = await request.json()
-        text = body.get("text", "").strip()[:500]
+        text = body.get("text", "").strip()[:200]  # Orpheus limit: 200 chars
+        lang = body.get("lang", "french").lower()
         if not text:
             return {"ok": False, "error": "No text"}
+        # Select model and voice by language
+        if lang == "arabic":
+            model = "canopylabs/orpheus-arabic-saudi"
+            voice = "sultan"
+        else:
+            model = "canopylabs/orpheus-v1-english"
+            voice = "troy"
         async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(
-                "https://api.openai.com/v1/audio/speech",
+                "https://api.groq.com/openai/v1/audio/speech",
                 headers={
-                    "Authorization": f"Bearer {OPENAI_KEY}",
+                    "Authorization": f"Bearer {GROQ_KEY}",
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": "tts-1",
-                    "voice": "onyx",
+                    "model": model,
+                    "voice": voice,
                     "input": text,
+                    "response_format": "wav",
                 }
             )
         if r.status_code == 200:
             from fastapi.responses import Response
-            return Response(content=r.content, media_type="audio/mpeg")
+            return Response(content=r.content, media_type="audio/wav")
         else:
             return {"ok": False, "error": r.text}
     except Exception as e:
