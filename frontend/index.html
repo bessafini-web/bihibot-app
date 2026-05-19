@@ -278,6 +278,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
       <button class="tb-btn shield" onclick="cmd('shield_status')">⬡ SHIELD</button>
       <button class="tb-btn" onclick="cmd('weekly')">≡ WEEKLY</button>
       <button class="tb-btn" id="vstop-btn" onclick="stopVoiceOut()" style="display:none;color:var(--red);border-color:rgba(255,45,85,.3)">⏹ STOP</button>
+      <button class="tb-btn" onclick="speakPremium()" title="OpenAI TTS — voix premium">⊞ AI TTS</button>
       <button class="tb-btn voice-on" id="vout" onclick="toggleVoiceOut()">◉ VOICE</button>
       <button class="tb-btn" onclick="cmd('status')">⊙</button>
       <div class="tb-clock" id="clk">--:--:--</div>
@@ -460,6 +461,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 const API=location.hostname==='localhost'?'http://localhost:8000':'https://inra-bihibot-app.hf.space';
 let TK='',hist=[],isRec=false,voiceOn=true,synth=window.speechSynthesis;
 let mediaRec=null,audioChunks=[];
+let lastLang='french',lastReply='';
 setInterval(()=>{document.getElementById('clk').textContent=new Date().toTimeString().slice(0,8);},1000);
 async function doLogin(){
   const p=document.getElementById('pwd').value.trim();if(!p)return;
@@ -507,6 +509,7 @@ async function s(txt){
     rmT(tid);
     if(r.ok){
       const d=await r.json();addM('b',d.reply);
+      lastLang=d.lang||'french';lastReply=d.reply||'';
       hist.push({role:'assistant',content:d.reply});
       if(hist.length>30)hist=hist.slice(-30);
       if(voiceOn)speak(d.reply);
@@ -520,7 +523,7 @@ async function cmd(a){
   const tid=typing();
   try{
     const r=await fetch(`${API}/chat`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${TK}`},body:JSON.stringify({messages:[{role:'user',content:a}],action:a})});
-    rmT(tid);if(r.ok){const d=await r.json();addM('b',d.reply);if(voiceOn)speak(d.reply);}
+    rmT(tid);if(r.ok){const d=await r.json();addM('b',d.reply);lastLang=d.lang||'french';lastReply=d.reply||'';if(voiceOn)speak(d.reply);}
   }catch{rmT(tid);addM('b','// ERROR');}
 }
 function addM(r,t){
@@ -543,7 +546,7 @@ function rsz(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight
 let audioCtx2=null,analyser2=null,silStart=null;
 let isLive=false,liveStr=null,lChunks=[],lRec=null;
 let lSpeaking=false,lProcessing=false;
-const MIN_VOL=22,SIL_MS=2000;
+const MIN_VOL=30,SIL_MS=1000;
 
 function toggleVoice(){isLive?stopLive():startLive();}
 
@@ -624,11 +627,24 @@ function stopLive(){
   synth.cancel();
 }
 
-async function speak(text){
+function speak(text){
   if(!voiceOn)return;
   const clean=text.replace(/<[^>]+>/g,'').replace(/[*`#]/g,'').replace(/\/\/.*/g,'').trim().slice(0,500);
   if(clean.length<2)return;
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(clean);
+  u.lang=lastLang==='arabic'?'ar-SA':'fr-FR';
+  u.rate=0.9;
+  u.pitch=1;
+  speechSynthesis.speak(u);
+}
+
+async function speakPremium(text){
+  const raw=text||(lastReply||'');
+  const clean=raw.replace(/<[^>]+>/g,'').replace(/[*`#]/g,'').replace(/\/\/.*/g,'').trim().slice(0,500);
+  if(clean.length<2)return;
   const btn=document.getElementById('vbtn');
+  synth.cancel();
   try{
     const r=await fetch(`${API}/tts`,{
       method:'POST',
@@ -641,25 +657,10 @@ async function speak(text){
       const audio=new Audio(url);
       if(btn)btn.textContent='🔊';
       audio.onended=()=>{URL.revokeObjectURL(url);if(btn&&!isLive)btn.textContent='🎙';};
-      audio.onerror=()=>{if(btn&&!isLive)btn.textContent='🎙';};
+      audio.onerror=()=>{speak(clean);};
       audio.play();
-    } else {
-      // Fallback browser synth
-      _browserSpeak(clean);
-    }
-  } catch(e){
-    _browserSpeak(clean);
-  }
-}
-
-function _browserSpeak(clean){
-  if(!synth)return;synth.cancel();
-  const u=new SpeechSynthesisUtterance(clean);
-  u.lang='fr-FR';u.rate=0.95;u.pitch=0.7;
-  const v=synth.getVoices();
-  const best=v.find(x=>x.lang.startsWith('fr')&&x.name.includes('Thomas'))||v.find(x=>x.lang.startsWith('fr'));
-  if(best)u.voice=best;
-  synth.speak(u);
+    }else speak(clean);
+  }catch{speak(clean);}
 }
 
 function handleMsgsClick(e){
