@@ -604,6 +604,10 @@ function addMessage(sender,text,meta='') {
   const div=document.createElement('div'); div.className='msg';
   div.innerHTML=`<div class="msg-header"><div class="msg-dot" style="background:${color};box-shadow:0 0 5px ${color}"></div><span class="msg-name">${sender.toUpperCase()}</span><span class="msg-time">${now}</span></div><div class="msg-body${isUser?' ibrahim':''}">${text}</div>${meta?`<div class="msg-meta">${meta}</div>`:''}`;
   msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+  // Auto-speak si message agent (pas Ibrahim)
+  if (sender.toLowerCase() !== 'ibrahim' && sender.toLowerCase() !== 'pihi') {
+    speak(text.substring(0, 200), currentLang);
+  }
 }
 function setTyping(active,label='PIHI analyse…') { document.getElementById('typing').classList.toggle('active',active); document.getElementById('typing-label').textContent=label; document.getElementById('panel-status').textContent=active?'EN COURS':'PRÊT'; }
 
@@ -643,6 +647,17 @@ input.addEventListener('blur',()=>pill.classList.remove('focused'));
 input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();}});
 document.getElementById('send-btn').addEventListener('click',handleSend);
 function handleSend(){const m=input.value.trim();if(!m)return;input.value='';sendMessage(m);}
+
+// TTS — Web Speech API
+function speak(text, lang) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang === 'ar' ? 'ar-MA' : lang === 'dr' ? 'fr-MA' : 'fr-FR';
+  utt.rate = 0.9;
+  utt.pitch = 1;
+  window.speechSynthesis.speak(utt);
+}
 
 const micBtn=document.getElementById('mic-btn'); let micActive=false,sr=null;
 const langMap={fr:'fr-FR',dr:'fr-MA',ar:'ar-MA'};
