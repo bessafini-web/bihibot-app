@@ -1013,15 +1013,49 @@ function setTyping(active,label='PIHI analyse…') {
 let sessionId=null;
 
 async function login(pw) {
+  let errMsg = '';
   try {
-    const r=await fetch(`${API_BASE}/auth/login`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({password:pw}),
+    const r = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw }),
     });
-    if(!r.ok) throw new Error();
-    const d=await r.json();
-    SESSION_TOKEN=d.token; sessionId=crypto.randomUUID(); return true;
-  } catch { return false; }
+
+    if (r.status === 401) {
+      errMsg = 'Mot de passe incorrect (401)';
+      console.error('[BIHI login] 401 Unauthorized — mauvais password');
+      return { ok: false, msg: errMsg };
+    }
+    if (r.status === 429) {
+      errMsg = 'Trop de tentatives — réessaie dans 60s (429)';
+      console.error('[BIHI login] 429 Rate limit');
+      return { ok: false, msg: errMsg };
+    }
+    if (!r.ok) {
+      errMsg = `Erreur serveur HTTP ${r.status}`;
+      console.error('[BIHI login] HTTP error:', r.status, r.statusText);
+      return { ok: false, msg: errMsg };
+    }
+
+    const d = await r.json();
+    SESSION_TOKEN = d.token;
+    sessionId = crypto.randomUUID();
+    console.log('[BIHI login] OK — token:', SESSION_TOKEN.substring(0, 16) + '...');
+    return { ok: true };
+
+  } catch (err) {
+    // TypeError: Failed to fetch = CORS ou réseau coupé
+    if (err instanceof TypeError && err.message.includes('fetch')) {
+      errMsg = `CORS ou réseau — ouvre via localhost (pas file://)`;
+      console.error('[BIHI login] CORS / réseau:', err.message);
+      console.error('[BIHI login] API_BASE:', API_BASE);
+      console.error('[BIHI login] Ouvre index.html via: python -m http.server 8080');
+    } else {
+      errMsg = `Erreur inattendue : ${err.message}`;
+      console.error('[BIHI login] Erreur inattendue:', err);
+    }
+    return { ok: false, msg: errMsg };
+  }
 }
 
 async function sendMessage(message) {
@@ -1130,20 +1164,26 @@ document.querySelectorAll('.lang').forEach(btn=>{
 });
 
 // ── Login ────────────────────────────────────────────────────
-document.getElementById('login-btn').addEventListener('click',async()=>{
-  const pw=document.getElementById('login-pw').value;
-  const err=document.getElementById('login-err');
-  if(!pw){ err.textContent='Mot de passe requis'; return; }
-  err.textContent='Vérification…';
-  const ok=await login(pw);
-  if(ok){
-    document.getElementById('login-overlay').style.display='none';
-    addMessage('PIHI','Ibrahim authentifié. Système BIHI opérationnel.',`session:${sessionId.substring(0,8)}…`);
-    AGENTS.forEach(ag=>setAgentStatus(ag.id,'ready'));
-    addShockwave(CX,CY);
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const pw  = document.getElementById('login-pw').value;
+  const err = document.getElementById('login-err');
+  if (!pw) { err.textContent = 'Mot de passe requis'; return; }
+
+  err.textContent = 'Connexion…';
+  err.style.color = 'rgba(255,215,0,0.6)';
+
+  const result = await login(pw);
+
+  if (result.ok) {
+    document.getElementById('login-overlay').style.display = 'none';
+    addMessage('PIHI', 'Ibrahim authentifié. Système BIHI opérationnel.',
+      `session:${sessionId.substring(0,8)}…`);
+    AGENTS.forEach(ag => setAgentStatus(ag.id, 'ready'));
+    addShockwave(CX, CY);
   } else {
-    err.textContent='Accès refusé';
-    document.getElementById('login-pw').value='';
+    err.style.color = '#ff6b6b';
+    err.textContent  = result.msg || 'Accès refusé';
+    document.getElementById('login-pw').value = '';
   }
 });
 document.getElementById('login-pw').addEventListener('keydown',e=>{
