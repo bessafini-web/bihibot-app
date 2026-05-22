@@ -434,6 +434,16 @@ function drawSun(t) {
   ctx.save(); ctx.beginPath(); ctx.arc(CX,CY,r,0,Math.PI*2); ctx.clip();
   const sh=ctx.createRadialGradient(CX-r*0.35,CY-r*0.35,0,CX-r*0.35,CY-r*0.35,r*0.5); sh.addColorStop(0,'rgba(255,255,255,0.35)'); sh.addColorStop(1,'transparent'); ctx.fillStyle=sh; ctx.fill(); ctx.restore();
   ctx.fillStyle='rgba(0,212,255,0.65)'; ctx.font=`${UNIT*0.18}px Orbitron,monospace`; ctx.textAlign='center'; ctx.fillText('PIHI',CX,CY+r+UNIT*0.25);
+  if (micActive) {
+    ctx.fillStyle = `rgba(255,50,50,${0.6 + Math.sin(t*0.15)*0.4})`;
+    ctx.beginPath();
+    ctx.arc(CX, CY, UNIT*0.3, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = `${UNIT*0.12}px Orbitron`;
+    ctx.textAlign = 'center';
+    ctx.fillText('⏹ STOP', CX, CY + UNIT*0.05);
+  }
 }
 
 function drawSphere(x,y,r,ag) {
@@ -557,6 +567,7 @@ document.addEventListener('keydown',e=>{
 canvas.addEventListener('click',e=>{
   const mx=e.clientX,my=e.clientY; let clicked=null;
   for(const ag of AGENTS){if(Math.hypot(mx-ag.x,my-ag.y)<ag.r+14){clicked=ag;break;}}
+  if(Math.hypot(mx-CX, my-CY) < UNIT*1.1 && micActive) { sr && sr.stop(); return; }
   if(clicked){openAgentPanel(clicked);return;}
   if(agentPanelOpen){const rect=document.getElementById('agent-panel').getBoundingClientRect();if(mx<rect.left||mx>rect.right||my<rect.top||my>rect.bottom)closeAgentPanel();}
   addShockwave(CX,CY);
@@ -571,7 +582,8 @@ function draw() {
   if(saturn && saturn.r>0) drawRingsBack(saturn.x,saturn.y,saturn.r);
   drawSun(t);
   AGENTS.forEach(ag=>{
-    ag.angle+=ag.speed; const orbitR=ag.orbitMul*UNIT;
+    const isPaused = hoveredAgent === ag;
+    if (!isPaused) ag.angle += ag.speed * 0.35; const orbitR=ag.orbitMul*UNIT;
     ag.r=ag.sizeMul*UNIT*0.15;
     ag.x=CX+Math.cos(ag.angle)*orbitR;
     ag.y=CY+Math.sin(ag.angle)*orbitR*0.88;
@@ -635,7 +647,19 @@ async function sendMessage(message) {
     if(agentId&&agentId!=='pihi'){const ag=AGENTS.find(a=>a.id===agentId);if(ag&&data.result?.confidence){ag.confidence=data.result.confidence;ag.currentTask=message.substring(0,40)+'…';}setAgentStatus(agentId,'active');if(ag)pushAgentLog(agentId,`tâche: ${message.substring(0,50)}`);setTimeout(()=>{setAgentStatus(agentId,'ready');if(ag){ag.currentTask='';pushAgentLog(agentId,'réponse envoyée');}},3500);}
     addShockwave(CX,CY);
     if(data.pihi==='blocked'){addMessage('PIHI',`⚠ Action bloquée — ${data.result?.message||''}`,`flags:${(data.flags||[]).join(', ')} · ${data.requires_meeting?'réunion requise':''} ${data.requires_authority?'validation Ibrahim':''}`);}
-    else{const res=data.result||{};const txt=res.data?.message||res.data?.draft?.body||res.data?.synthesis||res.data?.insight||res.reasoning||JSON.stringify(res.data||res,null,2).substring(0,400);const pct=Math.round((res.confidence||0)*100);addMessage(agentId||'PIHI',txt.substring(0,600),`agent:${agentId} · confiance:${pct}% · ${res.source||''}`);}
+    else{const res=data.result||{};const txt=res.data?.message||res.data?.draft?.body||res.data?.synthesis||res.data?.insight||res.reasoning||JSON.stringify(res.data||res,null,2).substring(0,400);const pct=Math.round((res.confidence||0)*100);addMessage(agentId||'PIHI',txt.substring(0,600),`agent:${agentId} · confiance:${pct}% · ${res.source||''}`);
+      if (agentId === 'zaeer' && res.data?.results?.length) {
+        const ag = AGENTS.find(a => a.id === 'zaeer');
+        if (ag) {
+          ag.currentTask = res.data.query;
+          AGENT_LOGS['zaeer'] = res.data.results.slice(0, 8).map(r => ({
+            time: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
+            text: `[${r.position}] ${r.domain} — ${r.title.substring(0, 45)}`
+          }));
+          openAgentPanel(ag);
+        }
+      }
+    }
   } catch {
     setTyping(false); document.getElementById('dot-pihi').className='s-dot pihi';
     addMessage('PIHI',`[Mode local] Backend non connecté.\nMessage reçu : "${message}"\nLance uvicorn api.main:app pour activer les agents.`,'source:local · backend:offline');
