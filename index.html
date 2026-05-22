@@ -343,6 +343,7 @@ window.onerror = (msg, src, line, col) => {
 const API_BASE = 'https://inra-bihibot-app.hf.space';
 let SESSION_TOKEN = null;
 let currentLang   = 'fr';
+let conversationHistory = [];
 
 const canvas = document.getElementById('cosmos');
 const ctx    = canvas.getContext('2d');
@@ -620,6 +621,8 @@ function addMessage(sender,text,meta='') {
   const div=document.createElement('div'); div.className='msg';
   div.innerHTML=`<div class="msg-header"><div class="msg-dot" style="background:${color};box-shadow:0 0 5px ${color}"></div><span class="msg-name">${sender.toUpperCase()}</span><span class="msg-time">${now}</span></div><div class="msg-body${isUser?' ibrahim':''}">${text}</div>${meta?`<div class="msg-meta">${meta}</div>`:''}`;
   msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+  conversationHistory.push({role: sender.toLowerCase()==='ibrahim'?'user':'assistant', content: text, agent: sender});
+  if (conversationHistory.length > 10) conversationHistory.shift();
   // Auto-speak si message agent (pas Ibrahim)
   if (sender.toLowerCase() !== 'ibrahim') {
     speak(text.substring(0, 200), currentLang);
@@ -644,7 +647,7 @@ async function sendMessage(message) {
   if(!SESSION_TOKEN){addMessage('PIHI','Session expirée. Reconnecte-toi.');return;}
   addMessage('Ibrahim',message); setTyping(true); document.getElementById('dot-pihi').className='s-dot active';
   try {
-    const r=await fetch(`${API_BASE}/chat`,{method:'POST',headers:{'Content-Type':'application/json','X-Token':SESSION_TOKEN},body:JSON.stringify({message,session_id:sessionId,context:{}})});
+    const r=await fetch(`${API_BASE}/chat`,{method:'POST',headers:{'Content-Type':'application/json','X-Token':SESSION_TOKEN},body:JSON.stringify({message,session_id:sessionId,context:{history:conversationHistory.slice(-6)}})});
     const data=await r.json(); setTyping(false); document.getElementById('dot-pihi').className='s-dot pihi';
     const agentId=data.agent;
     if(agentId&&agentId!=='pihi'){const ag=AGENTS.find(a=>a.id===agentId);if(ag&&data.result?.confidence){ag.confidence=data.result.confidence;ag.currentTask=message.substring(0,40)+'…';}setAgentStatus(agentId,'active');if(ag)pushAgentLog(agentId,`tâche: ${message.substring(0,50)}`);setTimeout(()=>{setAgentStatus(agentId,'ready');if(ag){ag.currentTask='';pushAgentLog(agentId,'réponse envoyée');}},3500);}
