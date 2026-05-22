@@ -308,6 +308,7 @@
       <button class="lang" data-lang="dr">DR</button>
       <button class="lang" data-lang="ar" dir="rtl">عر</button>
     </div>
+    <button id="tts-btn" title="Voix ON/OFF" style="padding:4px 11px;border-radius:20px;background:transparent;border:0.5px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.25);font-family:var(--font);font-size:11px;cursor:pointer;transition:all 0.2s ease;">🔊</button>
   </div>
   <div class="status-row" id="status-row">
     <div class="status-item">
@@ -649,8 +650,17 @@ document.getElementById('send-btn').addEventListener('click',handleSend);
 function handleSend(){const m=input.value.trim();if(!m)return;input.value='';sendMessage(m);}
 
 // TTS — Web Speech API
+let ttsEnabled = true;
+document.getElementById('tts-btn').addEventListener('click', () => {
+  ttsEnabled = !ttsEnabled;
+  const btn = document.getElementById('tts-btn');
+  btn.style.color = ttsEnabled ? 'var(--gold)' : 'rgba(255,255,255,0.25)';
+  btn.style.borderColor = ttsEnabled ? 'rgba(0,212,255,0.3)' : 'rgba(255,255,255,0.08)';
+  if (!ttsEnabled) window.speechSynthesis.cancel();
+});
+
 function speak(text, lang) {
-  if (!window.speechSynthesis) return;
+  if (!ttsEnabled || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = lang === 'ar' ? 'ar-MA' : lang === 'dr' ? 'fr-MA' : 'fr-FR';
