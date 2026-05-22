@@ -567,7 +567,7 @@ function draw() {
   drawStars(); drawShockwaves();
   AGENTS.forEach(ag=>drawOrbit(ag.orbitMul*UNIT));
   const saturn=AGENTS.find(a=>a.id==='legal');
-  if(saturn) drawRingsBack(saturn.x,saturn.y,saturn.r);
+  if(saturn && saturn.r>0) drawRingsBack(saturn.x,saturn.y,saturn.r);
   drawSun(t);
   AGENTS.forEach(ag=>{
     ag.angle+=ag.speed; const orbitR=ag.orbitMul*UNIT;
@@ -578,7 +578,7 @@ function draw() {
     if(hoveredAgent===ag) drawPlanetLabel(ag);
     if(ag.active&&t%40===0) activateOrbitStars(ag);
   });
-  if(saturn) drawRingsFront(saturn.x,saturn.y,saturn.r);
+  if(saturn && saturn.r>0) drawRingsFront(saturn.x,saturn.y,saturn.r);
   t++; requestAnimationFrame(draw);
 }
 
