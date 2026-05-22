@@ -195,6 +195,9 @@
     .lang { padding:4px 11px;border-radius:20px;background:transparent;border:0.5px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.25);font-family:var(--font);font-size:9px;letter-spacing:1px;cursor:pointer;transition:all 0.2s ease; }
     .lang:hover { border-color:rgba(255,215,0,0.3);color:rgba(255,215,0,0.6); }
     .lang.active { background:rgba(255,215,0,0.06);border-color:rgba(255,215,0,0.3);color:var(--gold); }
+    #tts-btn { width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid rgba(0,212,255,0.25);color:var(--gold);font-size:18px;cursor:pointer;flex-shrink:0;transition:all 0.25s ease;display:flex;align-items:center;justify-content:center; }
+    #tts-btn:hover { background:rgba(0,212,255,0.07); }
+    #tts-btn.active { border-color:var(--gold);box-shadow:0 0 20px rgba(0,212,255,0.35); }
     .status-row { display:flex;align-items:flex-start;gap:12px;padding:0 4px; }
     .status-item { display:flex;flex-direction:column;align-items:center;gap:3px;cursor:default; }
     .s-dot { width:7px;height:7px;border-radius:50%;transition:all 0.3s ease;background:rgba(255,255,255,0.08); }
@@ -298,6 +301,8 @@
       <div class="mic-ring r1"></div><div class="mic-ring r2"></div>🎙
     </button>
     <div class="sep"></div>
+    <button id="tts-btn" title="Voix ON/OFF">🔊</button>
+    <div class="sep"></div>
     <div class="input-zone">
       <input type="text" id="chat-input" placeholder="Commande Ibrahim…" autocomplete="off" spellcheck="false"/>
       <button id="send-btn" title="Envoyer">▲</button>
@@ -308,7 +313,6 @@
       <button class="lang" data-lang="dr">DR</button>
       <button class="lang" data-lang="ar" dir="rtl">عر</button>
     </div>
-    <button id="tts-btn" title="Voix ON/OFF" style="padding:4px 11px;border-radius:20px;background:transparent;border:0.5px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.25);font-family:var(--font);font-size:11px;cursor:pointer;transition:all 0.2s ease;">🔊</button>
   </div>
   <div class="status-row" id="status-row">
     <div class="status-item">
@@ -582,8 +586,7 @@ function draw() {
   if(saturn && saturn.r>0) drawRingsBack(saturn.x,saturn.y,saturn.r);
   drawSun(t);
   AGENTS.forEach(ag=>{
-    const isPaused = hoveredAgent === ag;
-    if (!isPaused) ag.angle += ag.speed * 0.35; const orbitR=ag.orbitMul*UNIT;
+    if (hoveredAgent?.id !== ag.id) ag.angle += ag.speed * 0.35; const orbitR=ag.orbitMul*UNIT;
     ag.r=ag.sizeMul*UNIT*0.15;
     ag.x=CX+Math.cos(ag.angle)*orbitR;
     ag.y=CY+Math.sin(ag.angle)*orbitR*0.88;
@@ -647,7 +650,7 @@ async function sendMessage(message) {
     if(agentId&&agentId!=='pihi'){const ag=AGENTS.find(a=>a.id===agentId);if(ag&&data.result?.confidence){ag.confidence=data.result.confidence;ag.currentTask=message.substring(0,40)+'…';}setAgentStatus(agentId,'active');if(ag)pushAgentLog(agentId,`tâche: ${message.substring(0,50)}`);setTimeout(()=>{setAgentStatus(agentId,'ready');if(ag){ag.currentTask='';pushAgentLog(agentId,'réponse envoyée');}},3500);}
     addShockwave(CX,CY);
     if(data.pihi==='blocked'){addMessage('PIHI',`⚠ Action bloquée — ${data.result?.message||''}`,`flags:${(data.flags||[]).join(', ')} · ${data.requires_meeting?'réunion requise':''} ${data.requires_authority?'validation Ibrahim':''}`);}
-    else{const res=data.result||{};const txt=res.data?.message||res.data?.draft?.body||res.data?.synthesis||res.data?.insight||res.reasoning||JSON.stringify(res.data||res,null,2).substring(0,400);const pct=Math.round((res.confidence||0)*100);addMessage(agentId||'PIHI',txt.substring(0,600),`agent:${agentId} · confiance:${pct}% · ${res.source||''}`);
+    else{const res=data.result||{};const txt=res.data?.message||res.data?.draft?.body||res.data?.synthesis||res.data?.insight||(res.data?.results?.length?`${res.data.results.length} résultats pour "${res.data.query}":\n`+res.data.results.slice(0,3).map(r=>`• ${r.title}\n  ${r.url}`).join('\n'):null)||res.reasoning||JSON.stringify(res.data||res,null,2).substring(0,400);const pct=Math.round((res.confidence||0)*100);addMessage(agentId||'PIHI',txt.substring(0,600),`agent:${agentId} · confiance:${pct}% · ${res.source||''}`);
       if (agentId === 'zaeer' && res.data?.results?.length) {
         const ag = AGENTS.find(a => a.id === 'zaeer');
         if (ag) {
@@ -685,11 +688,13 @@ document.getElementById('tts-btn').addEventListener('click', () => {
 
 function speak(text, lang) {
   if (!ttsEnabled || !window.speechSynthesis) return;
+  // Auto-detect Arabic/Darija
+  const hasArabic = /[؀-ۿ]/.test(text);
+  const detectedLang = hasArabic ? 'ar-MA' : lang === 'dr' ? 'fr-MA' : 'fr-FR';
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = lang === 'ar' ? 'ar-MA' : lang === 'dr' ? 'fr-MA' : 'fr-FR';
+  utt.lang = detectedLang;
   utt.rate = 0.9;
-  utt.pitch = 1;
   window.speechSynthesis.speak(utt);
 }
 
