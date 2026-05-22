@@ -605,7 +605,7 @@ function addMessage(sender,text,meta='') {
   div.innerHTML=`<div class="msg-header"><div class="msg-dot" style="background:${color};box-shadow:0 0 5px ${color}"></div><span class="msg-name">${sender.toUpperCase()}</span><span class="msg-time">${now}</span></div><div class="msg-body${isUser?' ibrahim':''}">${text}</div>${meta?`<div class="msg-meta">${meta}</div>`:''}`;
   msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
   // Auto-speak si message agent (pas Ibrahim)
-  if (sender.toLowerCase() !== 'ibrahim' && sender.toLowerCase() !== 'pihi') {
+  if (sender.toLowerCase() !== 'ibrahim') {
     speak(text.substring(0, 200), currentLang);
   }
 }
