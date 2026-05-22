@@ -536,7 +536,7 @@ let W, H, CX, CY, UNIT;
 function resize() {
   W = canvas.width  = window.innerWidth;
   H = canvas.height = window.innerHeight;
-  CX   = W * 0.35; /* MODIFIED — recentrage gauche */
+  CX   = W * 0.40;
   CY   = H * 0.50;
   UNIT = Math.min(W, H) * 0.078;
   initStars();
@@ -645,8 +645,7 @@ const AGENTS = [
     role:'Scout / Recherche Web 24/7',
     source:'Serper API — google.serper.dev',
     limit:'Ne décide pas — collecte et rapporte uniquement',
-    /* MODIFIED — orbitMul * 1.2 (+20%) */
-    orbitMul:1.38, sizeMul:0.9, speed:0.0200, phase:0.5,
+    orbitMul:1.17, sizeMul:0.9, speed:0.0200, phase:0.5,
     col:{ light:'#E0E0E0',mid:'#9E9E9E',dark:'#404040',base:'#707070',rim:'rgba(220,220,220,0.06)' },
     dotColor:'#9E9E9E', texture:'cratered',
     confidence:0, currentTask:'',
@@ -656,7 +655,7 @@ const AGENTS = [
     role:'Vérification / Scoring / Red flags',
     source:'Groq LLM + règles déterministes',
     limit:'Ne négocie pas — évalue et signale uniquement',
-    orbitMul:1.98, sizeMul:1.3, speed:0.0145, phase:1.1,
+    orbitMul:1.68, sizeMul:1.3, speed:0.0145, phase:1.1,
     col:{ light:'#FFE680',mid:'#D4A800',dark:'#6B5200',base:'#B08A00',rim:'rgba(255,220,0,0.10)' },
     dotColor:'#D4A800', texture:'venusian',
     confidence:0, currentTask:'',
@@ -666,7 +665,7 @@ const AGENTS = [
     role:'Stratégie / Patterns / Weekly Reports',
     source:'ILM + DECISIONS_LOG + Groq LLM',
     limit:'Ne décide pas souverainement — recommande uniquement',
-    orbitMul:2.64, sizeMul:1.35, speed:0.0118, phase:2.3,
+    orbitMul:2.24, sizeMul:1.35, speed:0.0118, phase:2.3,
     col:{ light:'#7EC8FF',mid:'#1976D2',dark:'#0D2B5E',base:'#0F3460',rim:'rgba(50,150,255,0.10)' },
     dotColor:'#1976D2', texture:'earth',
     confidence:0, currentTask:'',
@@ -676,7 +675,7 @@ const AGENTS = [
     role:'CRM / Emails / Diplomatie',
     source:'INVESTORS_CRM + Groq LLM (style Ibrahim ILM)',
     limit:'Ne ferme pas de deal — rédige et suit uniquement',
-    orbitMul:3.42, sizeMul:1.1, speed:0.0096, phase:4.1,
+    orbitMul:2.91, sizeMul:1.1, speed:0.0096, phase:4.1,
     col:{ light:'#FF8A65',mid:'#E53935',dark:'#6A0000',base:'#B71C1C',rim:'rgba(255,80,40,0.08)' },
     dotColor:'#E53935', texture:'mars',
     confidence:0, currentTask:'',
@@ -686,7 +685,7 @@ const AGENTS = [
     role:'Budget / Plafonds / Validation paiements',
     source:'ILM + plafonds.json + DECISIONS_LOG',
     limit:'Ne transfère pas — valide uniquement sous plafond',
-    orbitMul:4.50, sizeMul:2.2, speed:0.0072, phase:0.9,
+    orbitMul:3.83, sizeMul:2.2, speed:0.0072, phase:0.9,
     col:{ light:'#FFD180',mid:'#E65100',dark:'#3E1700',base:'#BF360C',rim:'rgba(255,150,50,0.09)' },
     dotColor:'#E65100', texture:'jupiter',
     confidence:0, currentTask:'',
@@ -696,7 +695,7 @@ const AGENTS = [
     role:'Juridique universel — tous pays / tous droits',
     source:'Base 8 juridictions + Zaeer web + ILM',
     limit:'Ne signe pas — analyse et alerte uniquement',
-    orbitMul:5.64, sizeMul:1.9, speed:0.0055, phase:2.8,
+    orbitMul:4.79, sizeMul:1.9, speed:0.0055, phase:2.8,
     col:{ light:'#FFE599',mid:'#C8A400',dark:'#5C4400',base:'#8B6914',rim:'rgba(255,220,100,0.08)' },
     dotColor:'#C8A400', texture:'saturn', hasRings:true,
     confidence:0, currentTask:'',
@@ -706,7 +705,7 @@ const AGENTS = [
     role:'Créativité / Wild cards / Angles inattendus',
     source:'Groq LLM (température haute) + ILM',
     limit:'Ne publie pas seul — soumet toujours à Ibrahim',
-    orbitMul:6.66, sizeMul:1.6, speed:0.0040, phase:5.5,
+    orbitMul:5.66, sizeMul:1.6, speed:0.0040, phase:5.5,
     col:{ light:'#A7FFEB',mid:'#00BCD4',dark:'#00363A',base:'#006064',rim:'rgba(0,200,210,0.09)' },
     dotColor:'#00BCD4', texture:'uranus',
     confidence:0, currentTask:'',
@@ -716,7 +715,7 @@ const AGENTS = [
     role:'Code / Architecture / Deploy',
     source:'Groq LLM + git + HuggingFace Spaces',
     limit:'Pas de mise en prod sans Ibrahim',
-    orbitMul:7.56, sizeMul:1.55, speed:0.0030, phase:3.7,
+    orbitMul:6.43, sizeMul:1.55, speed:0.0030, phase:3.7,
     col:{ light:'#82B1FF',mid:'#1565C0',dark:'#0A1B4A',base:'#0D47A1',rim:'rgba(80,130,255,0.10)' },
     dotColor:'#1565C0', texture:'neptune',
     confidence:0, currentTask:'',
