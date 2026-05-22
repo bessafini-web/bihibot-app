@@ -63,7 +63,6 @@
     }
     #messages::-webkit-scrollbar { width:2px; }
     #messages::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.18);border-radius:1px; }
-    /* MODIFIED — hover: glow sur msg-name, pas de scale */
     .msg { display:flex;flex-direction:column;gap:4px;animation:fadeSlide 0.3s ease;transition:all 0.3s ease; }
     .msg:hover .msg-name { color:var(--gold);text-shadow:0 0 8px rgba(255,215,0,0.5); }
     .msg:hover .msg-body { border-color:rgba(255,215,0,0.22); }
@@ -89,7 +88,7 @@
     .typing-dots span:nth-child(2) { animation-delay:0.2s; }
     .typing-dots span:nth-child(3) { animation-delay:0.4s; }
 
-    /* ── Left Panel — Agent Detail View MODIFIED ── */
+    /* ── Left Panel — Agent Detail View ── */
     #agent-panel {
       position:fixed;top:0;left:0;
       width:260px;height:95vh;max-height:95vh;
@@ -107,82 +106,38 @@
       display:flex;align-items:flex-start;justify-content:space-between;
       flex-shrink:0;
     }
-    .ap-agent-name {
-      font-size:13px;font-weight:700;letter-spacing:3px;
-      color:var(--gold);margin-bottom:4px;
-    }
+    .ap-agent-name { font-size:13px;font-weight:700;letter-spacing:3px;color:var(--gold);margin-bottom:4px; }
     .ap-status {
       font-size:8px;letter-spacing:2px;color:var(--muted);
       padding:2px 7px;border:0.5px solid rgba(255,215,0,0.2);
       border-radius:2px;display:inline-block;
     }
     .ap-status.active { color:#4CAF50;border-color:rgba(76,175,80,0.35); }
-    .ap-close {
-      cursor:pointer;font-size:14px;color:rgba(255,215,0,0.35);
-      background:none;border:none;padding:0;line-height:1;
-      transition:color 0.2s;
-    }
+    .ap-close { cursor:pointer;font-size:14px;color:rgba(255,215,0,0.35);background:none;border:none;padding:0;line-height:1;transition:color 0.2s; }
     .ap-close:hover { color:var(--gold); }
     .ap-divider { height:0.5px;background:rgba(255,215,0,0.08);flex-shrink:0; }
-    .ap-body {
-      flex:1;overflow-y:auto;padding:16px;
-      scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.12) transparent;
-    }
+    .ap-body { flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.12) transparent; }
     .ap-body::-webkit-scrollbar { width:2px; }
     .ap-body::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.12); }
     .ap-section { margin-bottom:16px; }
-    .ap-section-title {
-      font-size:8px;letter-spacing:2px;color:var(--gold);
-      text-transform:uppercase;margin-bottom:6px;
-      display:flex;align-items:center;gap:5px;
-    }
+    .ap-section-title { font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px; }
     .ap-section-title::before { content:'>';color:rgba(255,215,0,0.35); }
-    .ap-section-value {
-      font-family:'Space Mono',monospace;font-size:10px;
-      color:rgba(255,255,255,0.65);line-height:1.65;
-    }
-    .ap-conf-track {
-      height:3px;background:rgba(255,215,0,0.1);
-      border-radius:1px;margin-top:6px;overflow:hidden;
-    }
-    .ap-conf-fill {
-      height:100%;background:var(--gold);
-      border-radius:1px;transition:width 0.5s ease;
-    }
-    .ap-conf-pct {
-      font-size:9px;color:var(--muted);margin-top:4px;
-      font-family:'Space Mono',monospace;letter-spacing:1px;
-    }
-    .ap-logs {
-      background:rgba(255,215,0,0.02);
-      border:0.5px solid rgba(255,215,0,0.08);
-      border-radius:3px;padding:8px;
-      max-height:130px;overflow-y:auto;
-      scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.08) transparent;
-    }
+    .ap-section-value { font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.65);line-height:1.65; }
+    .ap-conf-track { height:3px;background:rgba(255,215,0,0.1);border-radius:1px;margin-top:6px;overflow:hidden; }
+    .ap-conf-fill { height:100%;background:var(--gold);border-radius:1px;transition:width 0.5s ease; }
+    .ap-conf-pct { font-size:9px;color:var(--muted);margin-top:4px;font-family:'Space Mono',monospace;letter-spacing:1px; }
+    .ap-logs { background:rgba(255,215,0,0.02);border:0.5px solid rgba(255,215,0,0.08);border-radius:3px;padding:8px;max-height:130px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.08) transparent; }
     .ap-logs::-webkit-scrollbar { width:2px; }
     .ap-logs::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.08); }
-    .ap-log-entry {
-      font-family:'Space Mono',monospace;font-size:9px;
-      color:rgba(255,255,255,0.4);line-height:1.8;
-      border-bottom:0.5px solid rgba(255,215,0,0.04);
-      padding-bottom:2px;margin-bottom:2px;
-    }
+    .ap-log-entry { font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.4);line-height:1.8;border-bottom:0.5px solid rgba(255,215,0,0.04);padding-bottom:2px;margin-bottom:2px; }
     .ap-log-entry:last-child { border-bottom:none;margin-bottom:0; }
     .ap-log-time { color:rgba(255,215,0,0.28);margin-right:6px; }
 
-    /* ── Tooltip (LOI 4 — source + confidence visibles) ── */
+    /* ── Tooltip ── */
     #planet-tooltip {
-      position:fixed;
-      background:rgba(0,3,12,0.85);
-      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-      border-radius:14px;
-      padding:14px 18px;
-      min-width:220px;max-width:270px;
-      z-index:100;pointer-events:none;
-      opacity:0;transition:opacity 0.18s ease,transform 0.18s ease;
-      transform:translateY(4px);
-      /* border set dynamically via JS from planet color */
+      position:fixed;background:rgba(0,3,12,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-radius:14px;padding:14px 18px;min-width:220px;max-width:270px;
+      z-index:100;pointer-events:none;opacity:0;transition:opacity 0.18s ease,transform 0.18s ease;transform:translateY(4px);
     }
     #planet-tooltip.visible { opacity:1;transform:translateY(0); }
     .tt-header { display:flex;align-items:center;gap:8px;margin-bottom:10px; }
@@ -191,129 +146,58 @@
     .tt-planet-label { font-size:9px;color:var(--muted);letter-spacing:1px; }
     .tt-row { font-size:9px;color:rgba(255,255,255,0.6);line-height:1.85;letter-spacing:0.5px; }
     .tt-row strong { color:var(--gold); }
-    /* Confidence bar */
-    .tt-conf-bar {
-      margin:7px 0 4px;height:2px;border-radius:2px;
-      background:rgba(255,215,0,0.1);overflow:hidden;
-    }
+    .tt-conf-bar { margin:7px 0 4px;height:2px;border-radius:2px;background:rgba(255,215,0,0.1);overflow:hidden; }
     .tt-conf-fill { height:100%;border-radius:2px;background:var(--gold);transition:width 0.4s ease; }
     .tt-conf-label { font-size:8px;color:var(--muted);letter-spacing:1px; }
-    .tt-limit {
-      margin-top:8px;padding-top:8px;
-      border-top:1px solid rgba(255,100,100,0.15);
-      font-size:9px;color:rgba(255,100,100,0.75);letter-spacing:0.5px;
-    }
-    .tt-task {
-      margin-top:6px;font-size:9px;
-      color:rgba(255,215,0,0.5);letter-spacing:0.5px;font-style:italic;
-    }
+    .tt-limit { margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,100,100,0.15);font-size:9px;color:rgba(255,100,100,0.75);letter-spacing:0.5px; }
+    .tt-task { margin-top:6px;font-size:9px;color:rgba(255,215,0,0.5);letter-spacing:0.5px;font-style:italic; }
     .tt-status { display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:9px;color:var(--muted); }
     .tt-status-dot { width:5px;height:5px;border-radius:50%;background:#444; }
     .tt-status-dot.active { background:#4CAF50;box-shadow:0 0 6px #4CAF50; }
 
     /* ── Bottom Bar ── */
-    /* MODIFIED — width adapté au panel 260px */
     #bottombar {
-      position:fixed;bottom:20px;
-      left:50%;transform:translateX(-50%);
+      position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
       display:flex;flex-direction:column;align-items:center;gap:10px;
-      z-index:20;
-      width:min(800px,calc(100vw - 290px));
+      z-index:20;width:min(800px,calc(100vw - 290px));
     }
     .bar-pill {
-      width:100%;
-      display:flex;align-items:center;
-      background:rgba(255,255,255,0.02);
-      border:0.5px solid rgba(255,215,0,0.1);
+      width:100%;display:flex;align-items:center;
+      background:rgba(255,255,255,0.02);border:0.5px solid rgba(255,215,0,0.1);
       backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-      border-radius:40px;
-      padding:8px 16px;height:58px;
-      transition:border-color 0.25s,box-shadow 0.25s;
+      border-radius:40px;padding:8px 16px;height:58px;transition:border-color 0.25s,box-shadow 0.25s;
     }
-    .bar-pill.focused {
-      border-color:rgba(255,215,0,0.35);
-      box-shadow:0 0 20px rgba(255,215,0,0.06);
-    }
-
-    /* Mic */
+    .bar-pill.focused { border-color:rgba(255,215,0,0.35);box-shadow:0 0 20px rgba(255,215,0,0.06); }
     .mic-btn {
       position:relative;width:44px;height:44px;border-radius:50%;flex-shrink:0;
-      background:transparent;border:1px solid rgba(255,215,0,0.25);
-      color:var(--gold);font-size:16px;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;
-      transition:all 0.25s ease;z-index:1;
+      background:transparent;border:1px solid rgba(255,215,0,0.25);color:var(--gold);font-size:16px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;transition:all 0.25s ease;z-index:1;
     }
     .mic-btn:hover { background:rgba(255,215,0,0.07);border-color:rgba(255,215,0,0.5); }
-    .mic-btn.active {
-      background:rgba(255,215,0,0.12);border-color:var(--gold);
-      box-shadow:0 0 20px rgba(255,215,0,0.35);
-    }
-    .mic-ring {
-      position:absolute;border-radius:50%;pointer-events:none;
-      animation:micPulse 2.2s ease-out infinite;
-    }
+    .mic-btn.active { background:rgba(255,215,0,0.12);border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.35); }
+    .mic-ring { position:absolute;border-radius:50%;pointer-events:none;animation:micPulse 2.2s ease-out infinite; }
     .mic-ring.r1 { width:58px;height:58px;border:1px solid rgba(255,215,0,0.15);animation-delay:0s; }
     .mic-ring.r2 { width:72px;height:72px;border:1px solid rgba(255,215,0,0.07);animation-delay:0.7s; }
     .mic-btn.active .mic-ring.r1 { border-color:rgba(255,215,0,0.5); }
     .mic-btn.active .mic-ring.r2 { border-color:rgba(255,215,0,0.25); }
-
-    /* Divider */
-    .sep {
-      width:1px;height:28px;flex-shrink:0;margin:0 14px;
-      background:linear-gradient(to bottom,transparent,rgba(255,215,0,0.2),transparent);
-    }
-
-    /* Input */
+    .sep { width:1px;height:28px;flex-shrink:0;margin:0 14px;background:linear-gradient(to bottom,transparent,rgba(255,215,0,0.2),transparent); }
     .input-zone { flex:1;display:flex;align-items:center;gap:8px;min-width:0; }
-    #chat-input {
-      flex:1;background:transparent;border:none;outline:none;
-      color:rgba(255,255,255,0.92);
-      font-family:'Space Mono',monospace;font-size:13px;
-      caret-color:var(--gold);min-width:0;
-    }
+    #chat-input { flex:1;background:transparent;border:none;outline:none;color:rgba(255,255,255,0.92);font-family:'Space Mono',monospace;font-size:13px;caret-color:var(--gold);min-width:0; }
     #chat-input::placeholder { color:rgba(255,215,0,0.22);font-size:12px; }
-
-    /* Send */
     #send-btn {
       width:34px;height:34px;border-radius:50%;flex-shrink:0;
-      background:radial-gradient(circle,#FFD700,#FFA500);
-      border:none;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;
-      font-size:13px;color:#000;font-weight:900;
-      transition:all 0.2s ease;
+      background:radial-gradient(circle,#FFD700,#FFA500);border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;font-size:13px;color:#000;font-weight:900;transition:all 0.2s ease;
     }
     #send-btn:hover { transform:scale(1.1);box-shadow:0 0 16px rgba(255,215,0,0.5); }
     #send-btn:active { transform:scale(0.95); }
-
-    /* Lang pills */
     .lang-pills { display:flex;gap:5px;flex-shrink:0; }
-    .lang {
-      padding:4px 11px;border-radius:20px;
-      background:transparent;border:0.5px solid rgba(255,255,255,0.08);
-      color:rgba(255,255,255,0.25);
-      font-family:var(--font);font-size:9px;letter-spacing:1px;
-      cursor:pointer;transition:all 0.2s ease;
-    }
+    .lang { padding:4px 11px;border-radius:20px;background:transparent;border:0.5px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.25);font-family:var(--font);font-size:9px;letter-spacing:1px;cursor:pointer;transition:all 0.2s ease; }
     .lang:hover { border-color:rgba(255,215,0,0.3);color:rgba(255,215,0,0.6); }
-    .lang.active {
-      background:rgba(255,215,0,0.06);
-      border-color:rgba(255,215,0,0.3);
-      color:var(--gold);
-    }
-
-    /* Status dots row — dot + label stacked */
-    .status-row {
-      display:flex;align-items:flex-start;gap:12px;
-      padding:0 4px;
-    }
-    .status-item {
-      display:flex;flex-direction:column;align-items:center;gap:3px;
-      cursor:default;
-    }
-    .s-dot {
-      width:7px;height:7px;border-radius:50%;
-      transition:all 0.3s ease;background:rgba(255,255,255,0.08);
-    }
+    .lang.active { background:rgba(255,215,0,0.06);border-color:rgba(255,215,0,0.3);color:var(--gold); }
+    .status-row { display:flex;align-items:flex-start;gap:12px;padding:0 4px; }
+    .status-item { display:flex;flex-direction:column;align-items:center;gap:3px;cursor:default; }
+    .s-dot { width:7px;height:7px;border-radius:50%;transition:all 0.3s ease;background:rgba(255,255,255,0.08); }
     .s-dot.idle   { background:rgba(255,255,255,0.08); }
     .s-dot.ready  { background:rgba(255,215,0,0.35);box-shadow:0 0 4px rgba(255,215,0,0.3); }
     .s-dot.active { animation:pulseDot 0.9s ease-in-out infinite; }
@@ -321,60 +205,27 @@
     .status-label { font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:0.5px; }
     .status-item:hover .status-label { color:var(--gold); }
 
-    /* ── Login overlay ── */
-    #login-overlay {
-      position:fixed;inset:0;z-index:200;
-      background:rgba(0,0,5,0.92);backdrop-filter:blur(8px);
-      display:flex;align-items:center;justify-content:center;
-    }
-    .login-box {
-      background:rgba(0,0,14,0.8);border:1px solid var(--border);
-      border-radius:20px;padding:40px 48px;text-align:center;min-width:320px;
-    }
+    /* ── Login ── */
+    #login-overlay { position:fixed;inset:0;z-index:200;background:rgba(0,0,5,0.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center; }
+    .login-box { background:rgba(0,0,14,0.8);border:1px solid var(--border);border-radius:20px;padding:40px 48px;text-align:center;min-width:320px; }
     .login-title { font-size:20px;letter-spacing:6px;color:var(--gold);margin-bottom:6px; }
     .login-sub { font-size:9px;color:var(--muted);letter-spacing:3px;margin-bottom:30px; }
-    .login-input {
-      width:100%;background:rgba(255,215,0,0.05);
-      border:1px solid rgba(255,215,0,0.25);border-radius:30px;
-      padding:12px 20px;color:var(--gold);
-      font-family:var(--font);font-size:14px;letter-spacing:4px;
-      text-align:center;outline:none;margin-bottom:16px;
-    }
+    .login-input { width:100%;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.25);border-radius:30px;padding:12px 20px;color:var(--gold);font-family:var(--font);font-size:14px;letter-spacing:4px;text-align:center;outline:none;margin-bottom:16px; }
     .login-input:focus { border-color:var(--gold);box-shadow:0 0 16px rgba(255,215,0,0.15); }
-    .login-btn {
-      width:100%;padding:12px;
-      background:linear-gradient(135deg,var(--gold),var(--gold2));
-      border:none;border-radius:30px;
-      color:#000;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:3px;
-      cursor:pointer;transition:all 0.2s;
-    }
+    .login-btn { width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:30px;color:#000;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:3px;cursor:pointer;transition:all 0.2s; }
     .login-btn:hover { box-shadow:0 0 20px rgba(255,215,0,0.4); }
     .login-err { font-size:10px;color:#ff6b6b;margin-top:10px;min-height:16px;letter-spacing:1px; }
 
-    /* ── Keyframes ── */
-    @keyframes pulseDot {
-      0%,100% { opacity:1;transform:scale(1); }
-      50%      { opacity:0.4;transform:scale(0.75); }
-    }
-    @keyframes micPulse {
-      0%   { transform:scale(1);opacity:0.7; }
-      100% { transform:scale(1.9);opacity:0; }
-    }
-    @keyframes typingBounce {
-      0%,60%,100% { transform:translateY(0); }
-      30%          { transform:translateY(-5px); }
-    }
-    @keyframes fadeSlide {
-      from { opacity:0;transform:translateY(8px); }
-      to   { opacity:1;transform:translateY(0); }
-    }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)} }
+    @keyframes micPulse { 0%{transform:scale(1);opacity:0.7}100%{transform:scale(1.9);opacity:0} }
+    @keyframes typingBounce { 0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)} }
+    @keyframes fadeSlide { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
 
 <canvas id="cosmos"></canvas>
 
-<!-- Right panel -->
 <div id="panel">
   <div id="panel-header">
     <div class="pihi-badge">
@@ -401,7 +252,6 @@
   </div>
 </div>
 
-<!-- MODIFIED — Left Panel Agent Detail View -->
 <div id="agent-panel">
   <div class="ap-header">
     <div>
@@ -412,48 +262,26 @@
   </div>
   <div class="ap-divider"></div>
   <div class="ap-body">
-    <div class="ap-section">
-      <div class="ap-section-title">RÔLE</div>
-      <div class="ap-section-value" id="ap-role">Non assigné</div>
-    </div>
-    <div class="ap-section">
-      <div class="ap-section-title">TÂCHE EN COURS</div>
-      <div class="ap-section-value" id="ap-task">En attente</div>
-    </div>
+    <div class="ap-section"><div class="ap-section-title">RÔLE</div><div class="ap-section-value" id="ap-role">Non assigné</div></div>
+    <div class="ap-section"><div class="ap-section-title">TÂCHE EN COURS</div><div class="ap-section-value" id="ap-task">En attente</div></div>
     <div class="ap-section">
       <div class="ap-section-title">CONFIDENCE</div>
-      <div class="ap-conf-track">
-        <div class="ap-conf-fill" id="ap-conf-fill" style="width:0%"></div>
-      </div>
+      <div class="ap-conf-track"><div class="ap-conf-fill" id="ap-conf-fill" style="width:0%"></div></div>
       <div class="ap-conf-pct" id="ap-conf-pct">0%</div>
     </div>
-    <div class="ap-section">
-      <div class="ap-section-title">SOURCE</div>
-      <div class="ap-section-value" id="ap-source">—</div>
-    </div>
-    <div class="ap-section">
-      <div class="ap-section-title">LIMITE</div>
-      <div class="ap-section-value" id="ap-limit" style="color:rgba(255,100,100,0.6)">—</div>
-    </div>
+    <div class="ap-section"><div class="ap-section-title">SOURCE</div><div class="ap-section-value" id="ap-source">—</div></div>
+    <div class="ap-section"><div class="ap-section-title">LIMITE</div><div class="ap-section-value" id="ap-limit" style="color:rgba(255,100,100,0.6)">—</div></div>
     <div class="ap-section">
       <div class="ap-section-title">LOGS RÉCENTS</div>
-      <div class="ap-logs" id="ap-logs">
-        <div class="ap-log-entry">
-          <span class="ap-log-time">--:--</span>Aucun log disponible
-        </div>
-      </div>
+      <div class="ap-logs" id="ap-logs"><div class="ap-log-entry"><span class="ap-log-time">--:--</span>Aucun log disponible</div></div>
     </div>
   </div>
 </div>
 
-<!-- Tooltip (LOI 4 — zéro black box) -->
 <div id="planet-tooltip">
   <div class="tt-header">
     <canvas class="tt-planet-icon" id="tt-icon" width="24" height="24"></canvas>
-    <div>
-      <div class="tt-name" id="tt-name">—</div>
-      <div class="tt-planet-label" id="tt-planet">—</div>
-    </div>
+    <div><div class="tt-name" id="tt-name">—</div><div class="tt-planet-label" id="tt-planet">—</div></div>
   </div>
   <div class="tt-row"><strong>RÔLE</strong> — <span id="tt-role"></span></div>
   <div class="tt-row"><strong>SOURCE</strong> — <span id="tt-source"></span></div>
@@ -461,44 +289,26 @@
   <div class="tt-conf-label" id="tt-conf-label">CONFIANCE —</div>
   <div class="tt-task" id="tt-task"></div>
   <div class="tt-limit" id="tt-limit"></div>
-  <div class="tt-status">
-    <div class="tt-status-dot" id="tt-sdot"></div>
-    <span id="tt-slabel">en veille</span>
-  </div>
+  <div class="tt-status"><div class="tt-status-dot" id="tt-sdot"></div><span id="tt-slabel">en veille</span></div>
 </div>
 
-<!-- Bottom bar -->
 <div id="bottombar">
   <div class="bar-pill" id="barpill">
-
-    <!-- Mic : WebSpeech API branché -->
     <button class="mic-btn" id="mic-btn" title="Commande vocale">
-      <div class="mic-ring r1"></div>
-      <div class="mic-ring r2"></div>
-      🎙
+      <div class="mic-ring r1"></div><div class="mic-ring r2"></div>🎙
     </button>
-
     <div class="sep"></div>
-
-    <!-- Input -->
     <div class="input-zone">
-      <input type="text" id="chat-input"
-             placeholder="Commande Ibrahim…"
-             autocomplete="off" spellcheck="false"/>
+      <input type="text" id="chat-input" placeholder="Commande Ibrahim…" autocomplete="off" spellcheck="false"/>
       <button id="send-btn" title="Envoyer">▲</button>
     </div>
-
     <div class="sep"></div>
-
-    <!-- Langue -->
     <div class="lang-pills">
       <button class="lang active" data-lang="fr">FR</button>
-      <button class="lang"        data-lang="dr">DR</button>
-      <button class="lang"        data-lang="ar" dir="rtl">عر</button>
+      <button class="lang" data-lang="dr">DR</button>
+      <button class="lang" data-lang="ar" dir="rtl">عر</button>
     </div>
   </div>
-
-  <!-- Status dots -->
   <div class="status-row" id="status-row">
     <div class="status-item">
       <div class="s-dot pihi" id="dot-pihi" style="background:#FFD700;box-shadow:0 0 8px #FFD700"></div>
@@ -507,7 +317,6 @@
   </div>
 </div>
 
-<!-- Login -->
 <div id="login-overlay">
   <div class="login-box">
     <div class="login-title">BIHI</div>
@@ -519,16 +328,17 @@
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════════════
-   BIHI AGENTIC OS — JARVIS v2
-   LOI 3 : chaque planète = exactement son agent, ni plus ni moins
-══════════════════════════════════════════════════════════════ */
+// Debug: capture toutes les erreurs JS non gérées
+window.__errors = [];
+window.onerror = (msg, src, line, col) => {
+  window.__errors.push(`${msg} @ ${src}:${line}:${col}`);
+  console.error('[BIHI ERR]', msg, 'line', line);
+};
 
 const API_BASE = 'https://inra-bihibot-app.hf.space';
 let SESSION_TOKEN = null;
 let currentLang   = 'fr';
 
-// ── Canvas ──────────────────────────────────────────────────
 const canvas = document.getElementById('cosmos');
 const ctx    = canvas.getContext('2d');
 let W, H, CX, CY, UNIT;
@@ -536,898 +346,328 @@ let W, H, CX, CY, UNIT;
 function resize() {
   W = canvas.width  = window.innerWidth;
   H = canvas.height = window.innerHeight;
-  CX   = W * 0.40;
+  CX   = (W - 260) * 0.48;             // centré dans la zone libre (hors panel droit)
   CY   = H * 0.50;
-  UNIT = Math.min(W, H) * 0.078;
+  UNIT = Math.min(W - 260, H) * 0.068; // orbites dans la zone utile
   initStars();
 }
 window.addEventListener('resize', resize);
 
-// ── Stars ───────────────────────────────────────────────────
 let stars = [];
 function initStars() {
   stars = Array.from({ length: 280 }, () => ({
-    x:       Math.random() * W,
-    y:       Math.random() * H,
-    r:       Math.random() * 1.2 + 0.2,
-    base:    Math.random() * 0.55 + 0.15,
-    twinkle: Math.random() * Math.PI * 2,
-    speed:   Math.random() * 0.025 + 0.008,
-    hue:     Math.random() < 0.15 ? 50 : (Math.random() < 0.1 ? 210 : 0),
-    activity:0,
-    actMax:  0,   // peak activity for smooth decay
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*1.2+0.2, base: Math.random()*0.55+0.15,
+    twinkle: Math.random()*Math.PI*2, speed: Math.random()*0.025+0.008,
+    hue: Math.random()<0.15?50:(Math.random()<0.1?210:0),
+    activity:0, actMax:0,
   }));
 }
 
 function drawStars() {
   stars.forEach(s => {
-    s.twinkle  += s.speed;
-    // smooth decay — activity drops asymptotically (LOI 4 smooth feedback)
-    s.activity  = s.activity > 0 ? Math.max(0, s.activity - 0.006) : 0;
-    const glow  = Math.min(1, s.activity);
-    const alpha = Math.min(1, s.base + Math.sin(s.twinkle) * 0.25 + glow * 1.2);
-    const r     = s.r + glow * 2.2;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
-    ctx.fillStyle = s.hue === 50
-      ? `rgba(255,220,100,${alpha.toFixed(2)})`
-      : s.hue === 210
-        ? `rgba(150,180,255,${alpha.toFixed(2)})`
-        : `rgba(255,255,255,${alpha.toFixed(2)})`;
+    s.twinkle += s.speed;
+    s.activity = s.activity>0 ? Math.max(0,s.activity-0.006) : 0;
+    const glow  = Math.min(1,s.activity);
+    const alpha = Math.min(1,s.base+Math.sin(s.twinkle)*0.25+glow*1.2);
+    const r     = s.r+glow*2.2;
+    ctx.beginPath(); ctx.arc(s.x,s.y,r,0,Math.PI*2);
+    ctx.fillStyle = s.hue===50 ? `rgba(255,220,100,${alpha.toFixed(2)})` : s.hue===210 ? `rgba(150,180,255,${alpha.toFixed(2)})` : `rgba(255,255,255,${alpha.toFixed(2)})`;
     ctx.fill();
   });
 }
 
-// Activate stars near a point — boost x2.5 for 1.5s (smooth decay after)
-function activateStarsNear(px, py, radius = 120, boost = 2.5) {
-  stars.forEach(s => {
-    if (Math.hypot(s.x - px, s.y - py) < radius) {
-      s.activity = Math.min(boost, s.activity + boost * (0.4 + Math.random() * 0.6));
-    }
-  });
+function activateStarsNear(px,py,radius=120,boost=2.5) {
+  stars.forEach(s => { if(Math.hypot(s.x-px,s.y-py)<radius) s.activity=Math.min(boost,s.activity+boost*(0.4+Math.random()*0.6)); });
 }
-
-// Activate stars along an agent's orbit arc
 function activateOrbitStars(ag) {
-  const orbitR = ag.orbitMul * UNIT;
-  stars.forEach(s => {
-    const dist = Math.abs(Math.hypot(s.x - CX, s.y - CY) - orbitR);
-    if (dist < 18) s.activity = Math.min(2.5, s.activity + 1.8);
-  });
+  const orbitR=ag.orbitMul*UNIT;
+  stars.forEach(s => { const dist=Math.abs(Math.hypot(s.x-CX,s.y-CY)-orbitR); if(dist<18) s.activity=Math.min(2.5,s.activity+1.8); });
 }
 
-// ── Shockwaves — 3 concentriques décalés ────────────────────
-let shockwaves = [];
-
-function addShockwave(x, y) {
-  // LOI 4 — onde visible = feedback utilisateur explicite
-  [0, 150, 300].forEach((delay, i) => {
-    setTimeout(() => {
-      shockwaves.push({
-        x, y, r: 0,
-        op:    0.75 - i * 0.18,
-        speed: 8 + i * 1.5,
-        lw:    1.8 - i * 0.4,
-      });
-    }, delay);
-  });
-  // Micro-bounce toutes les planètes actives
-  AGENTS.forEach(ag => {
-    if (ag.active) { ag.bounce = 1; ag.bounceDir = 1; }
-  });
-  activateStarsNear(x, y, 250, 2.5);
+let shockwaves=[];
+function addShockwave(x,y) {
+  [0,150,300].forEach((delay,i) => { setTimeout(()=>{ shockwaves.push({x,y,r:0,op:0.75-i*0.18,speed:8+i*1.5,lw:1.8-i*0.4}); },delay); });
+  AGENTS.forEach(ag => { if(ag.active){ag.bounce=1;ag.bounceDir=1;} });
+  activateStarsNear(x,y,250,2.5);
 }
-
 function drawShockwaves() {
-  shockwaves = shockwaves.filter(sw => sw.op > 0.01);
+  shockwaves=shockwaves.filter(sw=>sw.op>0.01);
   shockwaves.forEach(sw => {
-    ctx.beginPath();
-    ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(255,215,0,${sw.op.toFixed(2)})`;
-    ctx.lineWidth   = sw.lw;
-    ctx.stroke();
-    if (sw.r > 40) {
-      ctx.beginPath();
-      ctx.arc(sw.x, sw.y, sw.r * 0.55, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(255,180,0,${(sw.op * 0.35).toFixed(2)})`;
-      ctx.lineWidth   = sw.lw * 0.5;
-      ctx.stroke();
-    }
-    sw.r  += sw.speed;
-    sw.op -= 0.011;
+    ctx.beginPath(); ctx.arc(sw.x,sw.y,sw.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(255,215,0,${sw.op.toFixed(2)})`; ctx.lineWidth=sw.lw; ctx.stroke();
+    if(sw.r>40) { ctx.beginPath(); ctx.arc(sw.x,sw.y,sw.r*0.55,0,Math.PI*2); ctx.strokeStyle=`rgba(255,180,0,${(sw.op*0.35).toFixed(2)})`; ctx.lineWidth=sw.lw*0.5; ctx.stroke(); }
+    sw.r+=sw.speed; sw.op-=0.011;
   });
 }
 
-// ── Planet definitions (LOI 3 — frontières strictes) ────────
 const AGENTS = [
-  {
-    id:'zaeer', name:'Zaeer', planet:'Mercure', symbol:'☿',
-    role:'Scout / Recherche Web 24/7',
-    source:'Serper API — google.serper.dev',
-    limit:'Ne décide pas — collecte et rapporte uniquement',
-    orbitMul:1.17, sizeMul:0.9, speed:0.0200, phase:0.5,
-    col:{ light:'#E0E0E0',mid:'#9E9E9E',dark:'#404040',base:'#707070',rim:'rgba(220,220,220,0.06)' },
-    dotColor:'#9E9E9E', texture:'cratered',
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'chaheb', name:'Chaheb', planet:'Vénus', symbol:'♀',
-    role:'Vérification / Scoring / Red flags',
-    source:'Groq LLM + règles déterministes',
-    limit:'Ne négocie pas — évalue et signale uniquement',
-    orbitMul:1.68, sizeMul:1.3, speed:0.0145, phase:1.1,
-    col:{ light:'#FFE680',mid:'#D4A800',dark:'#6B5200',base:'#B08A00',rim:'rgba(255,220,0,0.10)' },
-    dotColor:'#D4A800', texture:'venusian',
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'zakia', name:'Zakia', planet:'Terre', symbol:'♁',
-    role:'Stratégie / Patterns / Weekly Reports',
-    source:'ILM + DECISIONS_LOG + Groq LLM',
-    limit:'Ne décide pas souverainement — recommande uniquement',
-    orbitMul:2.24, sizeMul:1.35, speed:0.0118, phase:2.3,
-    col:{ light:'#7EC8FF',mid:'#1976D2',dark:'#0D2B5E',base:'#0F3460',rim:'rgba(50,150,255,0.10)' },
-    dotColor:'#1976D2', texture:'earth',
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'wassi', name:'Wassi', planet:'Mars', symbol:'♂',
-    role:'CRM / Emails / Diplomatie',
-    source:'INVESTORS_CRM + Groq LLM (style Ibrahim ILM)',
-    limit:'Ne ferme pas de deal — rédige et suit uniquement',
-    orbitMul:2.91, sizeMul:1.1, speed:0.0096, phase:4.1,
-    col:{ light:'#FF8A65',mid:'#E53935',dark:'#6A0000',base:'#B71C1C',rim:'rgba(255,80,40,0.08)' },
-    dotColor:'#E53935', texture:'mars',
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'finance', name:'Finance', planet:'Jupiter', symbol:'♃',
-    role:'Budget / Plafonds / Validation paiements',
-    source:'ILM + plafonds.json + DECISIONS_LOG',
-    limit:'Ne transfère pas — valide uniquement sous plafond',
-    orbitMul:3.83, sizeMul:2.2, speed:0.0072, phase:0.9,
-    col:{ light:'#FFD180',mid:'#E65100',dark:'#3E1700',base:'#BF360C',rim:'rgba(255,150,50,0.09)' },
-    dotColor:'#E65100', texture:'jupiter',
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'legal', name:'Legal', planet:'Saturne', symbol:'♄',
-    role:'Juridique universel — tous pays / tous droits',
-    source:'Base 8 juridictions + Zaeer web + ILM',
-    limit:'Ne signe pas — analyse et alerte uniquement',
-    orbitMul:4.79, sizeMul:1.9, speed:0.0055, phase:2.8,
-    col:{ light:'#FFE599',mid:'#C8A400',dark:'#5C4400',base:'#8B6914',rim:'rgba(255,220,100,0.08)' },
-    dotColor:'#C8A400', texture:'saturn', hasRings:true,
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'basil', name:'Basil', planet:'Uranus', symbol:'⛢',
-    role:'Créativité / Wild cards / Angles inattendus',
-    source:'Groq LLM (température haute) + ILM',
-    limit:'Ne publie pas seul — soumet toujours à Ibrahim',
-    orbitMul:5.66, sizeMul:1.6, speed:0.0040, phase:5.5,
-    col:{ light:'#A7FFEB',mid:'#00BCD4',dark:'#00363A',base:'#006064',rim:'rgba(0,200,210,0.09)' },
-    dotColor:'#00BCD4', texture:'uranus',
-    confidence:0, currentTask:'',
-  },
-  {
-    id:'dev', name:'Dev', planet:'Neptune', symbol:'♆',
-    role:'Code / Architecture / Deploy',
-    source:'Groq LLM + git + HuggingFace Spaces',
-    limit:'Pas de mise en prod sans Ibrahim',
-    orbitMul:6.43, sizeMul:1.55, speed:0.0030, phase:3.7,
-    col:{ light:'#82B1FF',mid:'#1565C0',dark:'#0A1B4A',base:'#0D47A1',rim:'rgba(80,130,255,0.10)' },
-    dotColor:'#1565C0', texture:'neptune',
-    confidence:0, currentTask:'',
-  },
+  { id:'zaeer',   name:'Zaeer',   planet:'Mercure', symbol:'☿', role:'Scout / Recherche Web 24/7',                    source:'Serper API — google.serper.dev',              limit:'Ne décide pas — collecte et rapporte uniquement',          orbitMul:1.17,sizeMul:0.9, speed:0.0200,phase:0.5, col:{light:'#E0E0E0',mid:'#9E9E9E',dark:'#404040',base:'#707070',rim:'rgba(220,220,220,0.06)'},dotColor:'#9E9E9E',texture:'cratered',   confidence:0,currentTask:'' },
+  { id:'chaheb',  name:'Chaheb',  planet:'Vénus',   symbol:'♀', role:'Vérification / Scoring / Red flags',            source:'Groq LLM + règles déterministes',             limit:'Ne négocie pas — évalue et signale uniquement',            orbitMul:1.68,sizeMul:1.3, speed:0.0145,phase:1.1, col:{light:'#FFE680',mid:'#D4A800',dark:'#6B5200',base:'#B08A00',rim:'rgba(255,220,0,0.10)'},dotColor:'#D4A800',texture:'venusian',  confidence:0,currentTask:'' },
+  { id:'zakia',   name:'Zakia',   planet:'Terre',   symbol:'♁', role:'Stratégie / Patterns / Weekly Reports',         source:'ILM + DECISIONS_LOG + Groq LLM',              limit:'Ne décide pas souverainement — recommande uniquement',     orbitMul:2.24,sizeMul:1.35,speed:0.0118,phase:2.3, col:{light:'#7EC8FF',mid:'#1976D2',dark:'#0D2B5E',base:'#0F3460',rim:'rgba(50,150,255,0.10)'},dotColor:'#1976D2',texture:'earth',     confidence:0,currentTask:'' },
+  { id:'wassi',   name:'Wassi',   planet:'Mars',    symbol:'♂', role:'CRM / Emails / Diplomatie',                     source:'INVESTORS_CRM + Groq LLM (style Ibrahim ILM)',limit:'Ne ferme pas de deal — rédige et suit uniquement',         orbitMul:2.91,sizeMul:1.1, speed:0.0096,phase:4.1, col:{light:'#FF8A65',mid:'#E53935',dark:'#6A0000',base:'#B71C1C',rim:'rgba(255,80,40,0.08)'},dotColor:'#E53935',texture:'mars',     confidence:0,currentTask:'' },
+  { id:'finance', name:'Finance', planet:'Jupiter', symbol:'♃', role:'Budget / Plafonds / Validation paiements',      source:'ILM + plafonds.json + DECISIONS_LOG',         limit:'Ne transfère pas — valide uniquement sous plafond',        orbitMul:3.83,sizeMul:2.2, speed:0.0072,phase:0.9, col:{light:'#FFD180',mid:'#E65100',dark:'#3E1700',base:'#BF360C',rim:'rgba(255,150,50,0.09)'},dotColor:'#E65100',texture:'jupiter',  confidence:0,currentTask:'' },
+  { id:'legal',   name:'Legal',   planet:'Saturne', symbol:'♄', role:'Juridique universel — tous pays / tous droits', source:'Base 8 juridictions + Zaeer web + ILM',       limit:'Ne signe pas — analyse et alerte uniquement',              orbitMul:4.79,sizeMul:1.9, speed:0.0055,phase:2.8, col:{light:'#FFE599',mid:'#C8A400',dark:'#5C4400',base:'#8B6914',rim:'rgba(255,220,100,0.08)'},dotColor:'#C8A400',texture:'saturn',hasRings:true,confidence:0,currentTask:'' },
+  { id:'basil',   name:'Basil',   planet:'Uranus',  symbol:'⛢', role:'Créativité / Wild cards / Angles inattendus',   source:'Groq LLM (température haute) + ILM',          limit:'Ne publie pas seul — soumet toujours à Ibrahim',           orbitMul:5.66,sizeMul:1.6, speed:0.0040,phase:5.5, col:{light:'#A7FFEB',mid:'#00BCD4',dark:'#00363A',base:'#006064',rim:'rgba(0,200,210,0.09)'},dotColor:'#00BCD4',texture:'uranus',   confidence:0,currentTask:'' },
+  { id:'dev',     name:'Dev',     planet:'Neptune', symbol:'♆', role:'Code / Architecture / Deploy',                  source:'Groq LLM + git + HuggingFace Spaces',         limit:'Pas de mise en prod sans Ibrahim',                         orbitMul:6.43,sizeMul:1.55,speed:0.0030,phase:3.7, col:{light:'#82B1FF',mid:'#1565C0',dark:'#0A1B4A',base:'#0D47A1',rim:'rgba(80,130,255,0.10)'},dotColor:'#1565C0',texture:'neptune',  confidence:0,currentTask:'' },
 ];
 
-// Pre-generate deterministic surface data
 AGENTS.forEach(ag => {
-  ag.craters = Array.from({length:7},(_,i) => ({
-    ox: Math.sin(i*1.7)*0.55, oy: Math.cos(i*1.1)*0.45, r:0.06+i*0.025,
-  }));
-  ag.bands = Array.from({length:6},(_,i) => ({
-    oy:-0.8+i*0.32, h:0.22,
-  }));
-  ag.angle  = ag.phase;
-  ag.x = CX; ag.y = CY; ag.r = 10;
-  ag.active = false;
-  ag.pulse  = 0;
-  // Bounce state (micro-bounce on shockwave)
-  ag.bounce    = 0;   // 0..1
-  ag.bounceDir = 1;
-  ag.bounceScale = 1.0;
+  ag.craters = Array.from({length:7},(_,i)=>({ox:Math.sin(i*1.7)*0.55,oy:Math.cos(i*1.1)*0.45,r:0.06+i*0.025}));
+  ag.bands   = Array.from({length:6},(_,i)=>({oy:-0.8+i*0.32,h:0.22}));
+  ag.angle=ag.phase; ag.x=0; ag.y=0; ag.r=10;
+  ag.active=false; ag.pulse=0; ag.bounce=0; ag.bounceDir=1; ag.bounceScale=1.0;
 });
 
-// ── Sun ─────────────────────────────────────────────────────
 function drawSun(t) {
-  const r = UNIT * 1.4; /* MODIFIED — rayon 22→28 (+27%) */
-  // Outer glow layers
-  [3.5,2.8,2.1].forEach((mul,i) => {
-    const g = ctx.createRadialGradient(CX,CY,r*0.8,CX,CY,r*mul);
-    g.addColorStop(0,`rgba(255,150,0,${0.04-i*0.01})`);
-    g.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.arc(CX,CY,r*mul,0,Math.PI*2);
-    ctx.fillStyle=g; ctx.fill();
-  });
-  // Corona rays
+  const r=UNIT*1.4;
+  [3.5,2.8,2.1].forEach((mul,i)=>{ const g=ctx.createRadialGradient(CX,CY,r*0.8,CX,CY,r*mul); g.addColorStop(0,`rgba(255,150,0,${0.04-i*0.01})`); g.addColorStop(1,'transparent'); ctx.beginPath(); ctx.arc(CX,CY,r*mul,0,Math.PI*2); ctx.fillStyle=g; ctx.fill(); });
   ctx.save(); ctx.translate(CX,CY); ctx.rotate(t*0.002);
-  for(let i=0;i<12;i++) {
-    const a   = (i/12)*Math.PI*2;
-    const len = r*(1.5+Math.sin(t*0.003+i)*0.3);
-    const w   = r*0.12;
-    ctx.save(); ctx.rotate(a);
-    const rg = ctx.createLinearGradient(r*0.9,0,len,0);
-    rg.addColorStop(0,'rgba(255,180,0,0.18)'); rg.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.moveTo(r*0.9,-w/2); ctx.lineTo(len,0); ctx.lineTo(r*0.9,w/2);
-    ctx.fillStyle=rg; ctx.fill(); ctx.restore();
-  }
+  for(let i=0;i<12;i++) { const a=(i/12)*Math.PI*2,len=r*(1.5+Math.sin(t*0.003+i)*0.3),w=r*0.12; ctx.save(); ctx.rotate(a); const rg=ctx.createLinearGradient(r*0.9,0,len,0); rg.addColorStop(0,'rgba(255,180,0,0.18)'); rg.addColorStop(1,'transparent'); ctx.beginPath(); ctx.moveTo(r*0.9,-w/2); ctx.lineTo(len,0); ctx.lineTo(r*0.9,w/2); ctx.fillStyle=rg; ctx.fill(); ctx.restore(); }
   ctx.restore();
-  // Pulsing halo
-  const pulse = 1+Math.sin(t*0.004)*0.04;
-  const halo  = ctx.createRadialGradient(CX,CY,r*0.7,CX,CY,r*1.6*pulse);
-  halo.addColorStop(0,'rgba(255,200,50,0.22)');
-  halo.addColorStop(0.5,'rgba(255,140,0,0.08)');
-  halo.addColorStop(1,'transparent');
-  ctx.beginPath(); ctx.arc(CX,CY,r*1.6*pulse,0,Math.PI*2);
-  ctx.fillStyle=halo; ctx.fill();
-  // Main sphere
+  const pulse=1+Math.sin(t*0.004)*0.04; const halo=ctx.createRadialGradient(CX,CY,r*0.7,CX,CY,r*1.6*pulse); halo.addColorStop(0,'rgba(255,200,50,0.22)'); halo.addColorStop(0.5,'rgba(255,140,0,0.08)'); halo.addColorStop(1,'transparent'); ctx.beginPath(); ctx.arc(CX,CY,r*1.6*pulse,0,Math.PI*2); ctx.fillStyle=halo; ctx.fill();
   ctx.save(); ctx.beginPath(); ctx.arc(CX,CY,r,0,Math.PI*2); ctx.clip();
-  const sg = ctx.createRadialGradient(CX-r*0.25,CY-r*0.25,r*0.1,CX,CY,r);
-  sg.addColorStop(0,'#FFFDE7'); sg.addColorStop(0.3,'#FFE082');
-  sg.addColorStop(0.7,'#FF8F00'); sg.addColorStop(1,'#E65100');
-  ctx.fillStyle=sg; ctx.fill();
-  for(let i=0;i<6;i++) {
-    const a=((t*0.001+i*1.05)%(Math.PI*2));
-    const bx=CX+Math.cos(a)*r*0.4, by=CY+Math.sin(a)*r*0.35;
-    const bg=ctx.createRadialGradient(bx,by,0,bx,by,r*0.25);
-    bg.addColorStop(0,'rgba(255,250,180,0.12)'); bg.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.arc(bx,by,r*0.25,0,Math.PI*2);
-    ctx.fillStyle=bg; ctx.fill();
-  }
+  const sg=ctx.createRadialGradient(CX-r*0.25,CY-r*0.25,r*0.1,CX,CY,r); sg.addColorStop(0,'#FFFDE7'); sg.addColorStop(0.3,'#FFE082'); sg.addColorStop(0.7,'#FF8F00'); sg.addColorStop(1,'#E65100'); ctx.fillStyle=sg; ctx.fill();
+  for(let i=0;i<6;i++) { const a=((t*0.001+i*1.05)%(Math.PI*2)),bx=CX+Math.cos(a)*r*0.4,by=CY+Math.sin(a)*r*0.35; const bg=ctx.createRadialGradient(bx,by,0,bx,by,r*0.25); bg.addColorStop(0,'rgba(255,250,180,0.12)'); bg.addColorStop(1,'transparent'); ctx.beginPath(); ctx.arc(bx,by,r*0.25,0,Math.PI*2); ctx.fillStyle=bg; ctx.fill(); }
   ctx.restore();
-  // Specular
   ctx.save(); ctx.beginPath(); ctx.arc(CX,CY,r,0,Math.PI*2); ctx.clip();
-  const sh=ctx.createRadialGradient(CX-r*0.35,CY-r*0.35,0,CX-r*0.35,CY-r*0.35,r*0.5);
-  sh.addColorStop(0,'rgba(255,255,255,0.35)'); sh.addColorStop(1,'transparent');
-  ctx.fillStyle=sh; ctx.fill(); ctx.restore();
-  // Label
-  ctx.fillStyle='rgba(255,215,0,0.55)';
-  ctx.font=`${UNIT*0.18}px Orbitron,monospace`;
-  ctx.textAlign='center';
-  ctx.fillText('PIHI',CX,CY+r+UNIT*0.25);
+  const sh=ctx.createRadialGradient(CX-r*0.35,CY-r*0.35,0,CX-r*0.35,CY-r*0.35,r*0.5); sh.addColorStop(0,'rgba(255,255,255,0.35)'); sh.addColorStop(1,'transparent'); ctx.fillStyle=sh; ctx.fill(); ctx.restore();
+  ctx.fillStyle='rgba(255,215,0,0.55)'; ctx.font=`${UNIT*0.18}px Orbitron,monospace`; ctx.textAlign='center'; ctx.fillText('PIHI',CX,CY+r+UNIT*0.25);
 }
 
-// ── Sphere ──────────────────────────────────────────────────
-function drawSphere(x, y, r, ag) {
-  // Apply bounce scale (micro-bounce on shockwave — LOI 4 feedback visuel)
-  const s = ag.bounceScale;
-  const sx = x, sy = y;
-  ctx.save();
-  ctx.translate(sx, sy);
-  ctx.scale(s, s);
-  ctx.translate(-sx, -sy);
-
-  ctx.save();
-  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.clip();
+function drawSphere(x,y,r,ag) {
+  const s=ag.bounceScale; ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.translate(-x,-y);
+  ctx.save(); ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.clip();
   ctx.fillStyle=ag.col.base; ctx.fill();
-  const lg=ctx.createRadialGradient(x-r*0.32,y-r*0.38,r*0.05,x,y,r*1.15);
-  lg.addColorStop(0,ag.col.light); lg.addColorStop(0.45,ag.col.mid); lg.addColorStop(1,ag.col.dark);
-  ctx.fillStyle=lg; ctx.fill();
+  const lg=ctx.createRadialGradient(x-r*0.32,y-r*0.38,r*0.05,x,y,r*1.15); lg.addColorStop(0,ag.col.light); lg.addColorStop(0.45,ag.col.mid); lg.addColorStop(1,ag.col.dark); ctx.fillStyle=lg; ctx.fill();
   drawTexture(ctx,x,y,r,ag);
-  const shg=ctx.createRadialGradient(x+r*0.35,y+r*0.35,r*0.1,x+r*0.6,y+r*0.6,r*1.4);
-  shg.addColorStop(0,'transparent'); shg.addColorStop(0.5,'rgba(0,0,0,0.18)'); shg.addColorStop(1,'rgba(0,0,0,0.65)');
-  ctx.fillStyle=shg; ctx.fill();
+  const shg=ctx.createRadialGradient(x+r*0.35,y+r*0.35,r*0.1,x+r*0.6,y+r*0.6,r*1.4); shg.addColorStop(0,'transparent'); shg.addColorStop(0.5,'rgba(0,0,0,0.18)'); shg.addColorStop(1,'rgba(0,0,0,0.65)'); ctx.fillStyle=shg; ctx.fill(); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.clip();
+  const spg=ctx.createRadialGradient(x-r*0.38,y-r*0.4,0,x-r*0.38,y-r*0.4,r*0.42); spg.addColorStop(0,'rgba(255,255,255,0.42)'); spg.addColorStop(0.5,'rgba(255,255,255,0.12)'); spg.addColorStop(1,'transparent'); ctx.fillStyle=spg; ctx.fill(); ctx.restore();
+  const atmg=ctx.createRadialGradient(x,y,r*0.82,x,y,r*1.28); atmg.addColorStop(0,'transparent'); atmg.addColorStop(1,ag.col.rim); ctx.beginPath(); ctx.arc(x,y,r*1.28,0,Math.PI*2); ctx.fillStyle=atmg; ctx.fill();
   ctx.restore();
-  // Specular
-  ctx.save();
-  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.clip();
-  const spg=ctx.createRadialGradient(x-r*0.38,y-r*0.4,0,x-r*0.38,y-r*0.4,r*0.42);
-  spg.addColorStop(0,'rgba(255,255,255,0.42)'); spg.addColorStop(0.5,'rgba(255,255,255,0.12)'); spg.addColorStop(1,'transparent');
-  ctx.fillStyle=spg; ctx.fill();
-  ctx.restore();
-  // Atmosphere rim
-  const atmg=ctx.createRadialGradient(x,y,r*0.82,x,y,r*1.28);
-  atmg.addColorStop(0,'transparent'); atmg.addColorStop(1,ag.col.rim);
-  ctx.beginPath(); ctx.arc(x,y,r*1.28,0,Math.PI*2);
-  ctx.fillStyle=atmg; ctx.fill();
-
-  ctx.restore(); // restore scale transform
 }
 
 function drawTexture(ctx,x,y,r,ag) {
   switch(ag.texture) {
-    case 'cratered':
-      ctx.globalAlpha=0.28;
-      ag.craters.forEach(c => {
-        ctx.beginPath(); ctx.arc(x+c.ox*r,y+c.oy*r,c.r*r,0,Math.PI*2);
-        ctx.fillStyle='rgba(40,40,40,0.6)'; ctx.fill();
-      });
-      ctx.globalAlpha=1; break;
-    case 'venusian':
-      ctx.globalAlpha=0.18;
-      ag.bands.forEach((_,i) => {
-        ctx.beginPath(); ctx.ellipse(x,y+(-0.5+i*0.2)*r,r,r*0.07,i*0.1,0,Math.PI*2);
-        ctx.fillStyle='rgba(255,200,50,0.5)'; ctx.fill();
-      });
-      ctx.globalAlpha=1; break;
-    case 'earth':
-      ctx.globalAlpha=0.5;
-      [[-.2,-.15,.4,.28],[.1,.05,.35,.22],[-.35,.2,.3,.2]].forEach(([ox,oy,w,h]) => {
-        ctx.beginPath(); ctx.ellipse(x+ox*r,y+oy*r,w*r,h*r,ox*0.5,0,Math.PI*2);
-        ctx.fillStyle='rgba(30,120,40,0.7)'; ctx.fill();
-      });
-      ctx.beginPath(); ctx.ellipse(x,y-r*0.82,r*0.32,r*0.14,0,0,Math.PI*2);
-      ctx.fillStyle='rgba(220,240,255,0.75)'; ctx.fill();
-      ctx.globalAlpha=1; break;
-    case 'mars':
-      ctx.globalAlpha=0.65;
-      ctx.beginPath(); ctx.ellipse(x,y-r*0.78,r*0.28,r*0.12,0,0,Math.PI*2);
-      ctx.fillStyle='rgba(220,230,255,0.8)'; ctx.fill();
-      ctx.globalAlpha=1; break;
-    case 'jupiter':
-    case 'saturn':
-      ag.bands.forEach((_,i) => {
-        ctx.beginPath(); ctx.rect(x-r,y+((-0.8+i*0.32)*r),r*2,r*0.44);
-        ctx.fillStyle=i%2===0?'rgba(255,160,60,0.22)':'rgba(200,120,40,0.15)'; ctx.fill();
-      });
-      if(ag.texture==='jupiter') {
-        ctx.beginPath(); ctx.ellipse(x+r*0.28,y+r*0.12,r*0.22,r*0.12,-0.2,0,Math.PI*2);
-        ctx.fillStyle='rgba(180,50,30,0.45)'; ctx.fill();
-      }
-      break;
-    case 'uranus':
-      ctx.globalAlpha=0.12;
-      for(let i=0;i<3;i++) {
-        ctx.beginPath(); ctx.ellipse(x,y+(-0.3+i*0.3)*r,r,r*0.06,i*0.2,0,Math.PI*2);
-        ctx.fillStyle='rgba(100,240,240,0.5)'; ctx.fill();
-      }
-      ctx.globalAlpha=1; break;
-    case 'neptune':
-      ctx.globalAlpha=0.35;
-      ctx.beginPath(); ctx.ellipse(x-r*0.2,y+r*0.1,r*0.28,r*0.18,0.3,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,0,60,0.6)'; ctx.fill();
-      ctx.globalAlpha=1; break;
+    case 'cratered': ctx.globalAlpha=0.28; ag.craters.forEach(c=>{ctx.beginPath();ctx.arc(x+c.ox*r,y+c.oy*r,c.r*r,0,Math.PI*2);ctx.fillStyle='rgba(40,40,40,0.6)';ctx.fill();}); ctx.globalAlpha=1; break;
+    case 'venusian': ctx.globalAlpha=0.18; ag.bands.forEach((_,i)=>{ctx.beginPath();ctx.ellipse(x,y+(-0.5+i*0.2)*r,r,r*0.07,i*0.1,0,Math.PI*2);ctx.fillStyle='rgba(255,200,50,0.5)';ctx.fill();}); ctx.globalAlpha=1; break;
+    case 'earth': ctx.globalAlpha=0.5; [[-.2,-.15,.4,.28],[.1,.05,.35,.22],[-.35,.2,.3,.2]].forEach(([ox,oy,w,h])=>{ctx.beginPath();ctx.ellipse(x+ox*r,y+oy*r,w*r,h*r,ox*0.5,0,Math.PI*2);ctx.fillStyle='rgba(30,120,40,0.7)';ctx.fill();}); ctx.beginPath();ctx.ellipse(x,y-r*0.82,r*0.32,r*0.14,0,0,Math.PI*2);ctx.fillStyle='rgba(220,240,255,0.75)';ctx.fill(); ctx.globalAlpha=1; break;
+    case 'mars': ctx.globalAlpha=0.65; ctx.beginPath();ctx.ellipse(x,y-r*0.78,r*0.28,r*0.12,0,0,Math.PI*2);ctx.fillStyle='rgba(220,230,255,0.8)';ctx.fill(); ctx.globalAlpha=1; break;
+    case 'jupiter': case 'saturn': ag.bands.forEach((_,i)=>{ctx.beginPath();ctx.rect(x-r,y+((-0.8+i*0.32)*r),r*2,r*0.44);ctx.fillStyle=i%2===0?'rgba(255,160,60,0.22)':'rgba(200,120,40,0.15)';ctx.fill();}); if(ag.texture==='jupiter'){ctx.beginPath();ctx.ellipse(x+r*0.28,y+r*0.12,r*0.22,r*0.12,-0.2,0,Math.PI*2);ctx.fillStyle='rgba(180,50,30,0.45)';ctx.fill();} break;
+    case 'uranus': ctx.globalAlpha=0.12; for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(x,y+(-0.3+i*0.3)*r,r,r*0.06,i*0.2,0,Math.PI*2);ctx.fillStyle='rgba(100,240,240,0.5)';ctx.fill();} ctx.globalAlpha=1; break;
+    case 'neptune': ctx.globalAlpha=0.35; ctx.beginPath();ctx.ellipse(x-r*0.2,y+r*0.1,r*0.28,r*0.18,0.3,0,Math.PI*2);ctx.fillStyle='rgba(0,0,60,0.6)';ctx.fill(); ctx.globalAlpha=1; break;
   }
 }
 
-// ── Saturn rings ─────────────────────────────────────────────
-function ringGrad(x,rx) {
-  const g=ctx.createLinearGradient(x-rx,0,x+rx,0);
-  g.addColorStop(0,'rgba(200,160,60,0.15)'); g.addColorStop(0.3,'rgba(240,200,100,0.45)');
-  g.addColorStop(0.5,'rgba(255,215,0,0.38)'); g.addColorStop(0.7,'rgba(200,160,60,0.40)');
-  g.addColorStop(1,'rgba(160,120,40,0.15)'); return g;
-}
-function drawRingsBack(x,y,r) {
-  const rx=r*2.25,ry=r*0.52;
-  ctx.save(); ctx.beginPath();
-  ctx.ellipse(x,y,rx,ry,0,Math.PI,0,true);
-  ctx.ellipse(x,y,rx*0.6,ry*0.6,0,0,Math.PI,false);
-  ctx.closePath(); ctx.fillStyle=ringGrad(x,rx); ctx.fill(); ctx.restore();
-}
-function drawRingsFront(x,y,r) {
-  const rx=r*2.25,ry=r*0.52;
-  ctx.save(); ctx.beginPath();
-  ctx.ellipse(x,y,rx,ry,0,0,Math.PI);
-  ctx.ellipse(x,y,rx*0.6,ry*0.6,0,Math.PI,0,true);
-  ctx.closePath(); ctx.fillStyle=ringGrad(x,rx); ctx.fill(); ctx.restore();
-}
+function ringGrad(x,rx) { const g=ctx.createLinearGradient(x-rx,0,x+rx,0); g.addColorStop(0,'rgba(200,160,60,0.15)'); g.addColorStop(0.3,'rgba(240,200,100,0.45)'); g.addColorStop(0.5,'rgba(255,215,0,0.38)'); g.addColorStop(0.7,'rgba(200,160,60,0.40)'); g.addColorStop(1,'rgba(160,120,40,0.15)'); return g; }
+function drawRingsBack(x,y,r) { const rx=r*2.25,ry=r*0.52; ctx.save(); ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,Math.PI,0,true); ctx.ellipse(x,y,rx*0.6,ry*0.6,0,0,Math.PI,false); ctx.closePath(); ctx.fillStyle=ringGrad(x,rx); ctx.fill(); ctx.restore(); }
+function drawRingsFront(x,y,r) { const rx=r*2.25,ry=r*0.52; ctx.save(); ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,0,Math.PI); ctx.ellipse(x,y,rx*0.6,ry*0.6,0,Math.PI,0,true); ctx.closePath(); ctx.fillStyle=ringGrad(x,rx); ctx.fill(); ctx.restore(); }
+function drawOrbit(orbitR) { ctx.beginPath(); ctx.arc(CX,CY,orbitR,0,Math.PI*2); ctx.strokeStyle='rgba(255,215,0,0.05)'; ctx.lineWidth=0.7; ctx.stroke(); }
+function drawPlanetLabel(ag) { const fs=UNIT*0.15; ctx.fillStyle='rgba(255,215,0,0.5)'; ctx.font=`${fs}px Orbitron,monospace`; ctx.textAlign='center'; ctx.fillText(ag.name,ag.x,ag.y+ag.r+fs*1.5); }
+function drawPulse(ag) { if(ag.pulse<=0) return; const g=ctx.createRadialGradient(ag.x,ag.y,ag.r,ag.x,ag.y,ag.r*(1.6+ag.pulse)); g.addColorStop(0,ag.col.rim.replace('0.0',`${ag.pulse.toFixed(2)}`)); g.addColorStop(1,'transparent'); ctx.beginPath(); ctx.arc(ag.x,ag.y,ag.r*(1.6+ag.pulse),0,Math.PI*2); ctx.fillStyle=g; ctx.fill(); ag.pulse=Math.max(0,ag.pulse-0.016); }
+function updateBounce(ag) { if(ag.bounce<=0){ag.bounceScale=1.0;return;} ag.bounce-=0.06; ag.bounceScale=1.0+Math.sin(ag.bounce*Math.PI)*0.08; if(ag.bounce<0){ag.bounce=0;ag.bounceScale=1.0;} }
 
-function drawOrbit(orbitR) {
-  ctx.beginPath(); ctx.arc(CX,CY,orbitR,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,215,0,0.05)'; ctx.lineWidth=0.7; ctx.stroke();
-}
-
-function drawPlanetLabel(ag) {
-  const fs=UNIT*0.15;
-  ctx.fillStyle=`rgba(255,215,0,0.5)`;
-  ctx.font=`${fs}px Orbitron,monospace`;
-  ctx.textAlign='center';
-  ctx.fillText(ag.name,ag.x,ag.y+ag.r+fs*1.5);
-}
-
-function drawPulse(ag) {
-  if(ag.pulse<=0) return;
-  const g=ctx.createRadialGradient(ag.x,ag.y,ag.r,ag.x,ag.y,ag.r*(1.6+ag.pulse));
-  g.addColorStop(0,ag.col.rim.replace('0.0',`${ag.pulse.toFixed(2)}`));
-  g.addColorStop(1,'transparent');
-  ctx.beginPath(); ctx.arc(ag.x,ag.y,ag.r*(1.6+ag.pulse),0,Math.PI*2);
-  ctx.fillStyle=g; ctx.fill();
-  ag.pulse=Math.max(0,ag.pulse-0.016);
-}
-
-// ── Bounce update ────────────────────────────────────────────
-function updateBounce(ag) {
-  if(ag.bounce<=0) { ag.bounceScale=1.0; return; }
-  // Scale oscillates 1 → 1.08 → 1 over ~20 frames
-  ag.bounce    -= 0.06;
-  ag.bounceScale = 1.0 + Math.sin(ag.bounce * Math.PI) * 0.08;
-  if(ag.bounce<0) { ag.bounce=0; ag.bounceScale=1.0; }
-}
-
-// ── Hover detection ──────────────────────────────────────────
-let hoveredAgent = null;
-canvas.addEventListener('mousemove', e => {
-  const mx=e.clientX, my=e.clientY;
-  let found=null;
-  for(const ag of AGENTS) {
-    if(Math.hypot(mx-ag.x,my-ag.y)<ag.r+12) { found=ag; break; }
-  }
-  if(!found && Math.hypot(mx-CX,my-CY)<UNIT*1.1) found='pihi';
-  if(found!==hoveredAgent) { hoveredAgent=found; updateTooltip(found,mx,my); }
+let hoveredAgent=null;
+canvas.addEventListener('mousemove',e=>{
+  const mx=e.clientX,my=e.clientY; let found=null;
+  for(const ag of AGENTS){if(Math.hypot(mx-ag.x,my-ag.y)<ag.r+12){found=ag;break;}}
+  if(!found&&Math.hypot(mx-CX,my-CY)<UNIT*1.1) found='pihi';
+  if(found!==hoveredAgent){hoveredAgent=found;updateTooltip(found,mx,my);}
   else if(found) positionTooltip(mx,my);
 });
-canvas.addEventListener('mouseleave',()=>{
-  hoveredAgent=null;
-  document.getElementById('planet-tooltip').classList.remove('visible');
-});
+canvas.addEventListener('mouseleave',()=>{ hoveredAgent=null; document.getElementById('planet-tooltip').classList.remove('visible'); });
 
-function positionTooltip(mx,my) {
-  const tt=document.getElementById('planet-tooltip');
-  const margin=16, tw=280, th=220;
-  let tx=mx+22, ty=my-14;
-  if(tx+tw>W-350) tx=mx-tw-10;
-  if(ty+th>H-130) ty=my-th-10;
-  if(ty<10) ty=10;
-  tt.style.left=tx+'px'; tt.style.top=ty+'px';
-}
+function positionTooltip(mx,my) { const tt=document.getElementById('planet-tooltip'); let tx=mx+22,ty=my-14; if(tx+280>W-350) tx=mx-290; if(ty+220>H-130) ty=my-230; if(ty<10) ty=10; tt.style.left=tx+'px'; tt.style.top=ty+'px'; }
 
-// LOI 4 — tooltip zéro black box : source + confidence + tâche en cours
 function updateTooltip(ag,mx,my) {
   const tt=document.getElementById('planet-tooltip');
-  if(!ag) { tt.classList.remove('visible'); return; }
-
+  if(!ag){tt.classList.remove('visible');return;}
   if(ag==='pihi') {
     tt.style.border='0.5px solid rgba(255,215,0,0.35)';
-    document.getElementById('tt-name').style.color='#FFD700';
-    document.getElementById('tt-name').textContent='PIHI';
+    document.getElementById('tt-name').style.color='#FFD700'; document.getElementById('tt-name').textContent='PIHI';
     document.getElementById('tt-planet').textContent='Soleil — Superviseur Central';
     document.getElementById('tt-role').textContent='Orchestre tous les agents (LOI 3). Point d\'entrée unique.';
     document.getElementById('tt-source').textContent='ILM + Memory + Authority + Router';
-    document.getElementById('tt-conf-fill').style.width='100%';
-    document.getElementById('tt-conf-fill').style.background='#FFD700';
+    document.getElementById('tt-conf-fill').style.width='100%'; document.getElementById('tt-conf-fill').style.background='#FFD700';
     document.getElementById('tt-conf-label').textContent='CONFIANCE — 100% (superviseur)';
-    document.getElementById('tt-task').textContent='';
-    document.getElementById('tt-limit').textContent='⚡ Seul Ibrahim écrit dans l\'ILM (LOI 2)';
-    document.getElementById('tt-sdot').className='tt-status-dot active';
-    document.getElementById('tt-slabel').textContent='superviseur actif';
+    document.getElementById('tt-task').textContent=''; document.getElementById('tt-limit').textContent='⚡ Seul Ibrahim écrit dans l\'ILM (LOI 2)';
+    document.getElementById('tt-sdot').className='tt-status-dot active'; document.getElementById('tt-slabel').textContent='superviseur actif';
     drawMiniSun();
   } else {
-    const pct=Math.round((ag.confidence||0)*100);
-    const barColor=pct>=70?'#4CAF50':pct>=40?'#FFD700':'#ff6b6b';
+    const pct=Math.round((ag.confidence||0)*100); const barColor=pct>=70?'#4CAF50':pct>=40?'#FFD700':'#ff6b6b';
     tt.style.border=`0.5px solid ${ag.dotColor}40`;
-    document.getElementById('tt-name').style.color=ag.dotColor;
-    document.getElementById('tt-name').textContent=ag.name.toUpperCase();
+    document.getElementById('tt-name').style.color=ag.dotColor; document.getElementById('tt-name').textContent=ag.name.toUpperCase();
     document.getElementById('tt-planet').textContent=ag.planet+' — '+ag.symbol;
-    document.getElementById('tt-role').textContent=ag.role;
-    document.getElementById('tt-source').textContent=ag.source;
-    document.getElementById('tt-conf-fill').style.width=pct+'%';
-    document.getElementById('tt-conf-fill').style.background=barColor;
+    document.getElementById('tt-role').textContent=ag.role; document.getElementById('tt-source').textContent=ag.source;
+    document.getElementById('tt-conf-fill').style.width=pct+'%'; document.getElementById('tt-conf-fill').style.background=barColor;
     document.getElementById('tt-conf-label').textContent=`CONFIANCE — ${pct}%${pct===0?' (en veille)':''}`;
     document.getElementById('tt-task').textContent=ag.currentTask?`↳ ${ag.currentTask}`:'';
     document.getElementById('tt-limit').textContent='⚠ '+ag.limit;
-    const sdot=document.getElementById('tt-sdot');
-    sdot.className='tt-status-dot'+(ag.active?' active':'');
+    document.getElementById('tt-sdot').className='tt-status-dot'+(ag.active?' active':'');
     document.getElementById('tt-slabel').textContent=ag.active?'actif':'en veille';
     drawMiniPlanet(ag);
   }
-  positionTooltip(mx,my);
-  tt.classList.add('visible');
+  positionTooltip(mx,my); tt.classList.add('visible');
 }
 
-function drawMiniPlanet(ag) {
-  const ic=document.getElementById('tt-icon'), c=ic.getContext('2d');
-  c.clearRect(0,0,24,24);
-  c.save(); c.beginPath(); c.arc(12,12,10,0,Math.PI*2); c.clip();
-  const g=c.createRadialGradient(9,9,1,12,12,10);
-  g.addColorStop(0,ag.col.light); g.addColorStop(0.5,ag.col.mid); g.addColorStop(1,ag.col.dark);
-  c.fillStyle=g; c.fill(); c.restore();
-}
-function drawMiniSun() {
-  const ic=document.getElementById('tt-icon'), c=ic.getContext('2d');
-  c.clearRect(0,0,24,24);
-  const g=c.createRadialGradient(10,10,2,12,12,12);
-  g.addColorStop(0,'#FFFDE7'); g.addColorStop(0.5,'#FFE082'); g.addColorStop(1,'#FF8F00');
-  c.beginPath(); c.arc(12,12,11,0,Math.PI*2); c.fillStyle=g; c.fill();
-}
+function drawMiniPlanet(ag) { const ic=document.getElementById('tt-icon'),c=ic.getContext('2d'); c.clearRect(0,0,24,24); c.save(); c.beginPath(); c.arc(12,12,10,0,Math.PI*2); c.clip(); const g=c.createRadialGradient(9,9,1,12,12,10); g.addColorStop(0,ag.col.light); g.addColorStop(0.5,ag.col.mid); g.addColorStop(1,ag.col.dark); c.fillStyle=g; c.fill(); c.restore(); }
+function drawMiniSun() { const ic=document.getElementById('tt-icon'),c=ic.getContext('2d'); c.clearRect(0,0,24,24); const g=c.createRadialGradient(10,10,2,12,12,12); g.addColorStop(0,'#FFFDE7'); g.addColorStop(0.5,'#FFE082'); g.addColorStop(1,'#FF8F00'); c.beginPath(); c.arc(12,12,11,0,Math.PI*2); c.fillStyle=g; c.fill(); }
 
-// ── Left Panel — Agent Detail View MODIFIED ──────────────────
-let agentPanelOpen   = false;
-let agentPanelTarget = null;
-const AGENT_LOGS     = {}; // {agentId: [{time, text}]}
-
-const agentDefaults = {
-  name:'Non identifié', dotColor:'var(--gold)',
-  role:'Non assigné', currentTask:'En attente',
-  source:'—', limit:'—', confidence:0, active:false, id:'unknown',
-};
+let agentPanelOpen=false, agentPanelTarget=null;
+const AGENT_LOGS={};
+const agentDefaults={name:'Non identifié',dotColor:'var(--gold)',role:'Non assigné',currentTask:'En attente',source:'—',limit:'—',confidence:0,active:false,id:'unknown'};
 
 function openAgentPanel(ag) {
-  const data = ag || agentDefaults;
-  const pct  = Math.round((data.confidence || 0) * 100);
-  const barColor = pct >= 70 ? '#4CAF50' : pct >= 40 ? '#FFD700' : '#ff6b6b';
-
-  document.getElementById('ap-name').textContent         = data.name.toUpperCase();
-  document.getElementById('ap-name').style.color         = data.dotColor || 'var(--gold)';
-  document.getElementById('ap-status').textContent       = data.active ? 'ACTIF' : 'VEILLE';
-  document.getElementById('ap-status').className         = 'ap-status' + (data.active ? ' active' : '');
-  document.getElementById('ap-role').textContent         = data.role        || agentDefaults.role;
-  document.getElementById('ap-task').textContent         = data.currentTask || agentDefaults.currentTask;
-  document.getElementById('ap-source').textContent       = data.source      || '—';
-  document.getElementById('ap-limit').textContent        = data.limit       || '—';
-  document.getElementById('ap-conf-fill').style.width      = pct + '%';
-  document.getElementById('ap-conf-fill').style.background = barColor;
-  document.getElementById('ap-conf-pct').textContent       = pct + '%';
-
-  // Logs
-  const logs  = AGENT_LOGS[data.id] || [];
-  const logsEl = document.getElementById('ap-logs');
-  logsEl.innerHTML = logs.length
-    ? logs.slice(-10).reverse().map(l =>
-        `<div class="ap-log-entry"><span class="ap-log-time">${l.time}</span>${l.text}</div>`
-      ).join('')
-    : '<div class="ap-log-entry"><span class="ap-log-time">--:--</span>Aucun log disponible</div>';
-
-  document.getElementById('agent-panel').classList.add('open');
-  agentPanelOpen   = true;
-  agentPanelTarget = data;
+  const data=ag||agentDefaults; const pct=Math.round((data.confidence||0)*100); const barColor=pct>=70?'#4CAF50':pct>=40?'#FFD700':'#ff6b6b';
+  document.getElementById('ap-name').textContent=data.name.toUpperCase(); document.getElementById('ap-name').style.color=data.dotColor||'var(--gold)';
+  document.getElementById('ap-status').textContent=data.active?'ACTIF':'VEILLE'; document.getElementById('ap-status').className='ap-status'+(data.active?' active':'');
+  document.getElementById('ap-role').textContent=data.role||agentDefaults.role; document.getElementById('ap-task').textContent=data.currentTask||agentDefaults.currentTask;
+  document.getElementById('ap-source').textContent=data.source||'—'; document.getElementById('ap-limit').textContent=data.limit||'—';
+  document.getElementById('ap-conf-fill').style.width=pct+'%'; document.getElementById('ap-conf-fill').style.background=barColor; document.getElementById('ap-conf-pct').textContent=pct+'%';
+  const logs=AGENT_LOGS[data.id]||[]; const logsEl=document.getElementById('ap-logs');
+  logsEl.innerHTML=logs.length?logs.slice(-10).reverse().map(l=>`<div class="ap-log-entry"><span class="ap-log-time">${l.time}</span>${l.text}</div>`).join(''):'<div class="ap-log-entry"><span class="ap-log-time">--:--</span>Aucun log disponible</div>';
+  document.getElementById('agent-panel').classList.add('open'); agentPanelOpen=true; agentPanelTarget=data;
+}
+function closeAgentPanel() { document.getElementById('agent-panel').classList.remove('open'); agentPanelOpen=false; agentPanelTarget=null; }
+function pushAgentLog(agentId,text) {
+  if(!AGENT_LOGS[agentId]) AGENT_LOGS[agentId]=[];
+  const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  AGENT_LOGS[agentId].unshift({time:now,text:text.substring(0,60)});
+  if(AGENT_LOGS[agentId].length>20) AGENT_LOGS[agentId].pop();
+  if(agentPanelOpen&&agentPanelTarget?.id===agentId) openAgentPanel(agentPanelTarget);
 }
 
-function closeAgentPanel() {
-  document.getElementById('agent-panel').classList.remove('open');
-  agentPanelOpen   = false;
-  agentPanelTarget = null;
-}
-
-function pushAgentLog(agentId, text) {
-  if (!AGENT_LOGS[agentId]) AGENT_LOGS[agentId] = [];
-  const now = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  AGENT_LOGS[agentId].unshift({ time: now, text: text.substring(0, 60) });
-  if (AGENT_LOGS[agentId].length > 20) AGENT_LOGS[agentId].pop();
-  // Rafraîchir le panel si ouvert sur cet agent
-  if (agentPanelOpen && agentPanelTarget?.id === agentId) openAgentPanel(agentPanelTarget);
-}
-
-// Close button + Escape
-document.getElementById('ap-close').addEventListener('click', closeAgentPanel);
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && agentPanelOpen) closeAgentPanel();
-  // Ctrl+R — toggle panel droit visible/hidden
-  if (e.key === 'r' && e.ctrlKey) {
-    e.preventDefault();
-    const p = document.getElementById('panel');
-    p.style.display = p.style.display === 'none' ? 'flex' : 'none';
-  }
+document.getElementById('ap-close').addEventListener('click',closeAgentPanel);
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&agentPanelOpen) closeAgentPanel();
+  if(e.key==='r'&&e.ctrlKey){ e.preventDefault(); const p=document.getElementById('panel'); p.style.display=p.style.display==='none'?'flex':'none'; }
 });
 
-// ── Click → planète = panel gauche / canvas = shockwave MODIFIED
-canvas.addEventListener('click', e => {
-  const mx = e.clientX, my = e.clientY;
-
-  // Hit-test planètes
-  let clicked = null;
-  for (const ag of AGENTS) {
-    if (Math.hypot(mx - ag.x, my - ag.y) < ag.r + 14) { clicked = ag; break; }
-  }
-
-  if (clicked) {
-    openAgentPanel(clicked);
-    return; // pas de shockwave sur clic planète
-  }
-
-  // Clic hors panel gauche → fermeture
-  if (agentPanelOpen) {
-    const rect = document.getElementById('agent-panel').getBoundingClientRect();
-    if (mx < rect.left || mx > rect.right || my < rect.top || my > rect.bottom) {
-      closeAgentPanel();
-    }
-  }
-
-  addShockwave(CX, CY);
+canvas.addEventListener('click',e=>{
+  const mx=e.clientX,my=e.clientY; let clicked=null;
+  for(const ag of AGENTS){if(Math.hypot(mx-ag.x,my-ag.y)<ag.r+14){clicked=ag;break;}}
+  if(clicked){openAgentPanel(clicked);return;}
+  if(agentPanelOpen){const rect=document.getElementById('agent-panel').getBoundingClientRect();if(mx<rect.left||mx>rect.right||my<rect.top||my>rect.bottom)closeAgentPanel();}
+  addShockwave(CX,CY);
 });
 
-// ── Animation loop ───────────────────────────────────────────
-let t = 0;
+let t=0;
 function draw() {
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#000005'; ctx.fillRect(0,0,W,H);
-
-  drawStars();
-  drawShockwaves();
-  AGENTS.forEach(ag => drawOrbit(ag.orbitMul*UNIT));
-
-  // Saturn rings back
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#000005'; ctx.fillRect(0,0,W,H);
+  drawStars(); drawShockwaves();
+  AGENTS.forEach(ag=>drawOrbit(ag.orbitMul*UNIT));
   const saturn=AGENTS.find(a=>a.id==='legal');
   if(saturn) drawRingsBack(saturn.x,saturn.y,saturn.r);
-
   drawSun(t);
-
-  AGENTS.forEach(ag => {
-    ag.angle += ag.speed;
-    const orbitR = ag.orbitMul * UNIT;
-    ag.r = ag.sizeMul * UNIT * 0.15;
-    ag.x = CX + Math.cos(ag.angle) * orbitR;
-    ag.y = CY + Math.sin(ag.angle) * orbitR * 0.88;
-
-    updateBounce(ag);
-    drawPulse(ag);
-    drawSphere(ag.x, ag.y, ag.r, ag);
+  AGENTS.forEach(ag=>{
+    ag.angle+=ag.speed; const orbitR=ag.orbitMul*UNIT;
+    ag.r=ag.sizeMul*UNIT*0.15;
+    ag.x=CX+Math.cos(ag.angle)*orbitR;
+    ag.y=CY+Math.sin(ag.angle)*orbitR*0.88;
+    updateBounce(ag); drawPulse(ag); drawSphere(ag.x,ag.y,ag.r,ag);
     if(hoveredAgent===ag) drawPlanetLabel(ag);
-
-    // Active agents pulse their orbit stars
-    if(ag.active && t % 40 === 0) activateOrbitStars(ag);
+    if(ag.active&&t%40===0) activateOrbitStars(ag);
   });
-
   if(saturn) drawRingsFront(saturn.x,saturn.y,saturn.r);
-  t++;
-  requestAnimationFrame(draw);
+  t++; requestAnimationFrame(draw);
 }
 
-// ── Status row with labels ───────────────────────────────────
 function buildStatusRow() {
   const row=document.getElementById('status-row');
-  AGENTS.forEach(ag => {
-    const item=document.createElement('div');
-    item.className='status-item';
-    item.id=`si-${ag.id}`;
-    item.innerHTML=`
-      <div class="s-dot idle" id="dot-${ag.id}"
-           style="background:${ag.dotColor}20"></div>
-      <span class="status-label">${ag.name.substring(0,3).toUpperCase()}</span>`;
-    row.appendChild(item);
-  });
+  AGENTS.forEach(ag=>{ const item=document.createElement('div'); item.className='status-item'; item.id=`si-${ag.id}`; item.innerHTML=`<div class="s-dot idle" id="dot-${ag.id}" style="background:${ag.dotColor}20"></div><span class="status-label">${ag.name.substring(0,3).toUpperCase()}</span>`; row.appendChild(item); });
 }
 
-function setAgentStatus(agentId, status) {
-  const dot=document.getElementById(`dot-${agentId}`);
-  const ag =AGENTS.find(a=>a.id===agentId);
-  if(!dot||!ag) return;
+function setAgentStatus(agentId,status) {
+  const dot=document.getElementById(`dot-${agentId}`); const ag=AGENTS.find(a=>a.id===agentId); if(!dot||!ag) return;
   dot.className=`s-dot ${status}`;
-  if(status==='active') {
-    dot.style.background=ag.dotColor;
-    dot.style.boxShadow =`0 0 8px ${ag.dotColor}`;
-    ag.active=true; ag.pulse=0.9;
-    ag.bounce=1;
-    activateStarsNear(ag.x,ag.y,100,2.0);
-    activateOrbitStars(ag);
-    pushAgentLog(agentId, 'activation — dispatch PIHI'); /* MODIFIED */
-  } else if(status==='ready') {
-    dot.style.background=ag.dotColor+'88';
-    dot.style.boxShadow =`0 0 4px ${ag.dotColor}44`;
-    ag.active=false;
-  } else {
-    dot.style.background=ag.dotColor+'20';
-    dot.style.boxShadow ='none';
-    ag.active=false;
-  }
+  if(status==='active'){dot.style.background=ag.dotColor;dot.style.boxShadow=`0 0 8px ${ag.dotColor}`;ag.active=true;ag.pulse=0.9;ag.bounce=1;activateStarsNear(ag.x,ag.y,100,2.0);activateOrbitStars(ag);pushAgentLog(agentId,'activation — dispatch PIHI');}
+  else if(status==='ready'){dot.style.background=ag.dotColor+'88';dot.style.boxShadow=`0 0 4px ${ag.dotColor}44`;ag.active=false;}
+  else{dot.style.background=ag.dotColor+'20';dot.style.boxShadow='none';ag.active=false;}
 }
 
-// ── Messages ─────────────────────────────────────────────────
 const AGENT_COLORS={pihi:'#FFD700',ibrahim:'#FFA500'};
 AGENTS.forEach(ag=>AGENT_COLORS[ag.id]=ag.dotColor);
 
 function addMessage(sender,text,meta='') {
-  const msgs=document.getElementById('messages');
-  const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  const color=AGENT_COLORS[sender.toLowerCase()]||'#9E9E9E';
-  const isUser=sender.toLowerCase()==='ibrahim';
-  const div=document.createElement('div');
-  div.className='msg';
-  div.innerHTML=`
-    <div class="msg-header">
-      <div class="msg-dot" style="background:${color};box-shadow:0 0 5px ${color}"></div>
-      <span class="msg-name">${sender.toUpperCase()}</span>
-      <span class="msg-time">${now}</span>
-    </div>
-    <div class="msg-body${isUser?' ibrahim':''}">${text}</div>
-    ${meta?`<div class="msg-meta">${meta}</div>`:''}`;
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
+  const msgs=document.getElementById('messages'); const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const color=AGENT_COLORS[sender.toLowerCase()]||'#9E9E9E'; const isUser=sender.toLowerCase()==='ibrahim';
+  const div=document.createElement('div'); div.className='msg';
+  div.innerHTML=`<div class="msg-header"><div class="msg-dot" style="background:${color};box-shadow:0 0 5px ${color}"></div><span class="msg-name">${sender.toUpperCase()}</span><span class="msg-time">${now}</span></div><div class="msg-body${isUser?' ibrahim':''}">${text}</div>${meta?`<div class="msg-meta">${meta}</div>`:''}`;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
 }
+function setTyping(active,label='PIHI analyse…') { document.getElementById('typing').classList.toggle('active',active); document.getElementById('typing-label').textContent=label; document.getElementById('panel-status').textContent=active?'EN COURS':'PRÊT'; }
 
-function setTyping(active,label='PIHI analyse…') {
-  document.getElementById('typing').classList.toggle('active',active);
-  document.getElementById('typing-label').textContent=label;
-  document.getElementById('panel-status').textContent=active?'EN COURS':'PRÊT';
-}
-
-// ── API ──────────────────────────────────────────────────────
 let sessionId=null;
-
 async function login(pw) {
-  let errMsg = '';
   try {
-    const r = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: pw }),
-    });
-
-    if (r.status === 401) {
-      errMsg = 'Mot de passe incorrect (401)';
-      console.error('[BIHI login] 401 Unauthorized — mauvais password');
-      return { ok: false, msg: errMsg };
-    }
-    if (r.status === 429) {
-      errMsg = 'Trop de tentatives — réessaie dans 60s (429)';
-      console.error('[BIHI login] 429 Rate limit');
-      return { ok: false, msg: errMsg };
-    }
-    if (!r.ok) {
-      errMsg = `Erreur serveur HTTP ${r.status}`;
-      console.error('[BIHI login] HTTP error:', r.status, r.statusText);
-      return { ok: false, msg: errMsg };
-    }
-
-    const d = await r.json();
-    SESSION_TOKEN = d.token;
-    sessionId = crypto.randomUUID();
-    console.log('[BIHI login] OK — token:', SESSION_TOKEN.substring(0, 16) + '...');
-    return { ok: true };
-
-  } catch (err) {
-    // TypeError: Failed to fetch = CORS ou réseau coupé
-    if (err instanceof TypeError && err.message.includes('fetch')) {
-      errMsg = `CORS ou réseau — ouvre via localhost (pas file://)`;
-      console.error('[BIHI login] CORS / réseau:', err.message);
-      console.error('[BIHI login] API_BASE:', API_BASE);
-      console.error('[BIHI login] Ouvre index.html via: python -m http.server 8080');
-    } else {
-      errMsg = `Erreur inattendue : ${err.message}`;
-      console.error('[BIHI login] Erreur inattendue:', err);
-    }
-    return { ok: false, msg: errMsg };
+    const r=await fetch(`${API_BASE}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+    if(r.status===401) return{ok:false,msg:'Mot de passe incorrect (401)'};
+    if(r.status===429) return{ok:false,msg:'Trop de tentatives — réessaie dans 60s'};
+    if(!r.ok) return{ok:false,msg:`Erreur serveur HTTP ${r.status}`};
+    const d=await r.json(); SESSION_TOKEN=d.token; sessionId=crypto.randomUUID(); return{ok:true};
+  } catch(err) {
+    return{ok:false,msg:err instanceof TypeError&&err.message.includes('fetch')?'CORS ou réseau — ouvre via localhost':`Erreur : ${err.message}`};
   }
 }
 
 async function sendMessage(message) {
-  if(!SESSION_TOKEN) { addMessage('PIHI','Session expirée. Reconnecte-toi.'); return; }
-  addMessage('Ibrahim',message);
-  setTyping(true);
-  document.getElementById('dot-pihi').className='s-dot active';
+  if(!SESSION_TOKEN){addMessage('PIHI','Session expirée. Reconnecte-toi.');return;}
+  addMessage('Ibrahim',message); setTyping(true); document.getElementById('dot-pihi').className='s-dot active';
   try {
-    const r=await fetch(`${API_BASE}/chat`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','X-Token':SESSION_TOKEN},
-      body:JSON.stringify({message,session_id:sessionId,context:{}}),
-    });
-    const data=await r.json();
-    setTyping(false);
-    document.getElementById('dot-pihi').className='s-dot pihi';
+    const r=await fetch(`${API_BASE}/chat`,{method:'POST',headers:{'Content-Type':'application/json','X-Token':SESSION_TOKEN},body:JSON.stringify({message,session_id:sessionId,context:{}})});
+    const data=await r.json(); setTyping(false); document.getElementById('dot-pihi').className='s-dot pihi';
     const agentId=data.agent;
-    if(agentId&&agentId!=='pihi') {
-      const ag=AGENTS.find(a=>a.id===agentId);
-      if(ag&&data.result?.confidence) {
-        ag.confidence=data.result.confidence;
-        ag.currentTask=message.substring(0,40)+'…';
-      }
-      setAgentStatus(agentId,'active');
-      if(ag) pushAgentLog(agentId, `tâche: ${message.substring(0,50)}`); /* MODIFIED */
-      setTimeout(()=>{
-        setAgentStatus(agentId,'ready');
-        if(ag){ ag.currentTask=''; pushAgentLog(agentId,'réponse envoyée'); }
-      },3500);
-    }
+    if(agentId&&agentId!=='pihi'){const ag=AGENTS.find(a=>a.id===agentId);if(ag&&data.result?.confidence){ag.confidence=data.result.confidence;ag.currentTask=message.substring(0,40)+'…';}setAgentStatus(agentId,'active');if(ag)pushAgentLog(agentId,`tâche: ${message.substring(0,50)}`);setTimeout(()=>{setAgentStatus(agentId,'ready');if(ag){ag.currentTask='';pushAgentLog(agentId,'réponse envoyée');}},3500);}
     addShockwave(CX,CY);
-    if(data.pihi==='blocked') {
-      addMessage('PIHI',
-        `⚠ Action bloquée — ${data.result?.message||''}`,
-        `flags:${(data.flags||[]).join(', ')} · ${data.requires_meeting?'réunion requise':''} ${data.requires_authority?'validation Ibrahim':''}`,
-      );
-    } else {
-      const res=data.result||{};
-      const txt=res.data?.message||res.data?.draft?.body||res.data?.synthesis||res.data?.insight||res.reasoning||JSON.stringify(res.data||res,null,2).substring(0,400);
-      const pct=Math.round((res.confidence||0)*100);
-      addMessage(agentId||'PIHI',txt.substring(0,600),
-        `agent:${agentId} · confiance:${pct}% · ${res.source||''}`);
-    }
+    if(data.pihi==='blocked'){addMessage('PIHI',`⚠ Action bloquée — ${data.result?.message||''}`,`flags:${(data.flags||[]).join(', ')} · ${data.requires_meeting?'réunion requise':''} ${data.requires_authority?'validation Ibrahim':''}`);}
+    else{const res=data.result||{};const txt=res.data?.message||res.data?.draft?.body||res.data?.synthesis||res.data?.insight||res.reasoning||JSON.stringify(res.data||res,null,2).substring(0,400);const pct=Math.round((res.confidence||0)*100);addMessage(agentId||'PIHI',txt.substring(0,600),`agent:${agentId} · confiance:${pct}% · ${res.source||''}`);}
   } catch {
-    setTyping(false);
-    document.getElementById('dot-pihi').className='s-dot pihi';
-    addMessage('PIHI',
-      `[Mode local] Backend non connecté.\nMessage reçu : "${message}"\nLance uvicorn api.main:app pour activer les agents.`,
-      'source:local · backend:offline');
+    setTyping(false); document.getElementById('dot-pihi').className='s-dot pihi';
+    addMessage('PIHI',`[Mode local] Backend non connecté.\nMessage reçu : "${message}"\nLance uvicorn api.main:app pour activer les agents.`,'source:local · backend:offline');
   }
 }
 
-// ── Input ────────────────────────────────────────────────────
-const input=document.getElementById('chat-input');
-const pill =document.getElementById('barpill');
-
+const input=document.getElementById('chat-input'); const pill=document.getElementById('barpill');
 input.addEventListener('focus',()=>pill.classList.add('focused'));
-input.addEventListener('blur', ()=>pill.classList.remove('focused'));
-input.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();} });
+input.addEventListener('blur',()=>pill.classList.remove('focused'));
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();}});
 document.getElementById('send-btn').addEventListener('click',handleSend);
-function handleSend(){ const m=input.value.trim(); if(!m) return; input.value=''; sendMessage(m); }
+function handleSend(){const m=input.value.trim();if(!m)return;input.value='';sendMessage(m);}
 
-// ── Mic — WebSpeech API ──────────────────────────────────────
-const micBtn=document.getElementById('mic-btn');
-let micActive=false, sr=null;
-
+const micBtn=document.getElementById('mic-btn'); let micActive=false,sr=null;
 const langMap={fr:'fr-FR',dr:'fr-MA',ar:'ar-MA'};
-
 micBtn.addEventListener('click',()=>{
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR) { addMessage('PIHI','WebSpeech non disponible dans ce navigateur.'); return; }
-  if(micActive) { sr&&sr.stop(); return; }
-  sr=new SR();
-  sr.lang=langMap[currentLang]||'fr-FR';
-  sr.interimResults=true;
-  sr.continuous=false;
-  // Transcript temps réel dans l'input
-  sr.onresult=e=>{
-    let interim='', final='';
-    for(const r of e.results) {
-      if(r.isFinal) final+=r[0].transcript;
-      else interim+=r[0].transcript;
-    }
-    input.value=final||interim;
-  };
-  sr.onend=()=>{
-    micActive=false; micBtn.classList.remove('active');
-    if(input.value.trim()) handleSend();
-  };
-  sr.onerror=()=>{ micActive=false; micBtn.classList.remove('active'); };
-  sr.start();
-  micActive=true; micBtn.classList.add('active');
+  if(!SR){addMessage('PIHI','WebSpeech non disponible dans ce navigateur.');return;}
+  if(micActive){sr&&sr.stop();return;}
+  sr=new SR(); sr.lang=langMap[currentLang]||'fr-FR'; sr.interimResults=true; sr.continuous=false;
+  sr.onresult=e=>{let interim='',final='';for(const r of e.results){if(r.isFinal)final+=r[0].transcript;else interim+=r[0].transcript;}input.value=final||interim;};
+  sr.onend=()=>{micActive=false;micBtn.classList.remove('active');if(input.value.trim())handleSend();};
+  sr.onerror=()=>{micActive=false;micBtn.classList.remove('active');};
+  sr.start(); micActive=true; micBtn.classList.add('active');
 });
 
-// ── Lang pills ───────────────────────────────────────────────
-const placeholders={
-  fr:'Commande Ibrahim…',
-  dr:'أمر ليبراهيم — دارجة · français · عربي …',
-  ar:'أمر إبراهيم…',
-};
+const placeholders={fr:'Commande Ibrahim…',dr:'أمر ليبراهيم — دارجة · français · عربي …',ar:'أمر إبراهيم…'};
 document.querySelectorAll('.lang').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    document.querySelectorAll('.lang').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentLang=btn.dataset.lang;
-    input.dir  =currentLang==='ar'?'rtl':'ltr';
-    input.placeholder=placeholders[currentLang]||placeholders.fr;
-    if(sr&&micActive) { sr.lang=langMap[currentLang]; }
+    document.querySelectorAll('.lang').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+    currentLang=btn.dataset.lang; input.dir=currentLang==='ar'?'rtl':'ltr'; input.placeholder=placeholders[currentLang]||placeholders.fr;
+    if(sr&&micActive)sr.lang=langMap[currentLang];
   });
 });
 
-// ── Login ────────────────────────────────────────────────────
-document.getElementById('login-btn').addEventListener('click', async () => {
-  const pw  = document.getElementById('login-pw').value;
-  const err = document.getElementById('login-err');
-  if (!pw) { err.textContent = 'Mot de passe requis'; return; }
-
-  err.textContent = 'Connexion…';
-  err.style.color = 'rgba(255,215,0,0.6)';
-
-  const result = await login(pw);
-
-  if (result.ok) {
-    document.getElementById('login-overlay').style.display = 'none';
-    addMessage('PIHI', 'Ibrahim authentifié. Système BIHI opérationnel.',
-      `session:${sessionId.substring(0,8)}…`);
-    AGENTS.forEach(ag => setAgentStatus(ag.id, 'ready'));
-    addShockwave(CX, CY);
-  } else {
-    err.style.color = '#ff6b6b';
-    err.textContent  = result.msg || 'Accès refusé';
-    document.getElementById('login-pw').value = '';
-  }
+document.getElementById('login-btn').addEventListener('click',async()=>{
+  const pw=document.getElementById('login-pw').value; const err=document.getElementById('login-err');
+  if(!pw){err.textContent='Mot de passe requis';return;}
+  err.textContent='Connexion…'; err.style.color='rgba(255,215,0,0.6)';
+  const result=await login(pw);
+  if(result.ok){document.getElementById('login-overlay').style.display='none';addMessage('PIHI','Ibrahim authentifié. Système BIHI opérationnel.',`session:${sessionId.substring(0,8)}…`);AGENTS.forEach(ag=>setAgentStatus(ag.id,'ready'));addShockwave(CX,CY);}
+  else{err.style.color='#ff6b6b';err.textContent=result.msg||'Accès refusé';document.getElementById('login-pw').value='';}
 });
-document.getElementById('login-pw').addEventListener('keydown',e=>{
-  if(e.key==='Enter') document.getElementById('login-btn').click();
-});
+document.getElementById('login-pw').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click();});
+document.getElementById('login-pw').addEventListener('dblclick',()=>{SESSION_TOKEN='local-dev-mode';sessionId=crypto.randomUUID();document.getElementById('login-overlay').style.display='none';addMessage('PIHI','[Dev mode] Session locale — backend non connecté.','mode:local·no-auth');AGENTS.forEach(ag=>setAgentStatus(ag.id,'ready'));addShockwave(CX,CY);});
 
-// DEV MODE — remove in production
-document.getElementById('login-pw').addEventListener('dblclick',()=>{
-  SESSION_TOKEN='local-dev-mode';
-  sessionId=crypto.randomUUID();
-  document.getElementById('login-overlay').style.display='none';
-  addMessage('PIHI','[Dev mode] Session locale — backend non connecté.','mode:local·no-auth');
-  AGENTS.forEach(ag=>setAgentStatus(ag.id,'ready'));
-  addShockwave(CX,CY);
-});
-
-// ── Boot ─────────────────────────────────────────────────────
 resize();
 buildStatusRow();
 draw();
