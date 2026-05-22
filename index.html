@@ -35,48 +35,52 @@
     /* ── Canvas ── */
     #cosmos { position:fixed;inset:0;display:block;cursor:crosshair; }
 
-    /* ── Right Panel ── */
+    /* ── Right Panel — MODIFIED: width 260px, font 12px, hover glow ── */
     #panel {
       position:fixed;top:0;right:0;
-      width:340px;height:calc(100vh - 120px);
+      width:260px;max-height:95vh;height:calc(100vh - 120px);
       background:var(--glass);
       backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
       border-left:1px solid var(--border);
       display:flex;flex-direction:column;z-index:10;overflow:hidden;
     }
     #panel-header {
-      padding:18px 20px 14px;border-bottom:1px solid var(--border);
-      display:flex;align-items:center;gap:10px;
+      padding:16px 18px 12px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;gap:10px;flex-shrink:0;
     }
-    .pihi-badge { display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase; }
+    .pihi-badge { display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;text-transform:uppercase; }
     .pihi-dot-badge {
       width:8px;height:8px;border-radius:50%;
       background:var(--gold);box-shadow:0 0 8px var(--gold);
       animation:pulseDot 2s ease-in-out infinite;
     }
-    #panel-title { font-size:11px;letter-spacing:3px;color:var(--gold); }
+    #panel-title { font-size:12px;letter-spacing:3px;color:var(--gold); }
     #panel-status { font-size:9px;color:var(--muted);margin-left:auto;letter-spacing:1px; }
     #messages {
-      flex:1;overflow-y:auto;padding:16px;
-      display:flex;flex-direction:column;gap:12px;
-      scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.2) transparent;
+      flex:1;overflow-y:auto;padding:14px;
+      display:flex;flex-direction:column;gap:10px;
+      scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.18) transparent;
     }
-    #messages::-webkit-scrollbar { width:3px; }
-    #messages::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.2);border-radius:2px; }
-    .msg { display:flex;flex-direction:column;gap:4px;animation:fadeSlide 0.3s ease; }
+    #messages::-webkit-scrollbar { width:2px; }
+    #messages::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.18);border-radius:1px; }
+    /* MODIFIED — hover: glow sur msg-name, pas de scale */
+    .msg { display:flex;flex-direction:column;gap:4px;animation:fadeSlide 0.3s ease;transition:all 0.3s ease; }
+    .msg:hover .msg-name { color:var(--gold);text-shadow:0 0 8px rgba(255,215,0,0.5); }
+    .msg:hover .msg-body { border-color:rgba(255,215,0,0.22); }
     .msg-header { display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase; }
     .msg-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
-    .msg-name { color:var(--muted); }
+    .msg-name { color:var(--muted);transition:color 0.3s,text-shadow 0.3s; }
     .msg-time { color:rgba(255,215,0,0.25);margin-left:auto; }
     .msg-body {
       background:rgba(255,215,0,0.04);border:1px solid rgba(255,215,0,0.08);
-      border-radius:10px;padding:10px 13px;
-      font-family:'Space Mono',monospace;font-size:11px;line-height:1.7;
+      border-radius:4px;padding:9px 12px;
+      font-family:'Space Mono',monospace;font-size:12px;line-height:1.65;
       color:rgba(255,255,255,0.85);white-space:pre-wrap;word-break:break-word;
+      transition:border-color 0.3s;
     }
     .msg-body.ibrahim { border-color:rgba(255,215,0,0.2);background:rgba(255,215,0,0.06); }
     .msg-meta { font-size:9px;color:rgba(255,215,0,0.25);padding-left:4px;letter-spacing:1px; }
-    #typing { display:none;padding:0 16px 8px;font-size:10px;color:var(--muted);letter-spacing:2px; }
+    #typing { display:none;padding:0 14px 8px;font-size:10px;color:var(--muted);letter-spacing:2px; }
     #typing.active { display:flex;align-items:center;gap:6px; }
     .typing-dots span {
       display:inline-block;width:4px;height:4px;background:var(--gold);border-radius:50%;
@@ -84,6 +88,88 @@
     }
     .typing-dots span:nth-child(2) { animation-delay:0.2s; }
     .typing-dots span:nth-child(3) { animation-delay:0.4s; }
+
+    /* ── Left Panel — Agent Detail View MODIFIED ── */
+    #agent-panel {
+      position:fixed;top:0;left:0;
+      width:260px;height:95vh;max-height:95vh;
+      background:rgba(0,0,10,0.94);
+      border-right:1px solid var(--border);
+      display:flex;flex-direction:column;
+      z-index:15;overflow:hidden;
+      transform:translateX(-100%);
+      transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    #agent-panel.open { transform:translateX(0); }
+    .ap-header {
+      padding:16px 18px 12px;
+      border-bottom:1px solid rgba(255,215,0,0.1);
+      display:flex;align-items:flex-start;justify-content:space-between;
+      flex-shrink:0;
+    }
+    .ap-agent-name {
+      font-size:13px;font-weight:700;letter-spacing:3px;
+      color:var(--gold);margin-bottom:4px;
+    }
+    .ap-status {
+      font-size:8px;letter-spacing:2px;color:var(--muted);
+      padding:2px 7px;border:0.5px solid rgba(255,215,0,0.2);
+      border-radius:2px;display:inline-block;
+    }
+    .ap-status.active { color:#4CAF50;border-color:rgba(76,175,80,0.35); }
+    .ap-close {
+      cursor:pointer;font-size:14px;color:rgba(255,215,0,0.35);
+      background:none;border:none;padding:0;line-height:1;
+      transition:color 0.2s;
+    }
+    .ap-close:hover { color:var(--gold); }
+    .ap-divider { height:0.5px;background:rgba(255,215,0,0.08);flex-shrink:0; }
+    .ap-body {
+      flex:1;overflow-y:auto;padding:16px;
+      scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.12) transparent;
+    }
+    .ap-body::-webkit-scrollbar { width:2px; }
+    .ap-body::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.12); }
+    .ap-section { margin-bottom:16px; }
+    .ap-section-title {
+      font-size:8px;letter-spacing:2px;color:var(--gold);
+      text-transform:uppercase;margin-bottom:6px;
+      display:flex;align-items:center;gap:5px;
+    }
+    .ap-section-title::before { content:'>';color:rgba(255,215,0,0.35); }
+    .ap-section-value {
+      font-family:'Space Mono',monospace;font-size:10px;
+      color:rgba(255,255,255,0.65);line-height:1.65;
+    }
+    .ap-conf-track {
+      height:3px;background:rgba(255,215,0,0.1);
+      border-radius:1px;margin-top:6px;overflow:hidden;
+    }
+    .ap-conf-fill {
+      height:100%;background:var(--gold);
+      border-radius:1px;transition:width 0.5s ease;
+    }
+    .ap-conf-pct {
+      font-size:9px;color:var(--muted);margin-top:4px;
+      font-family:'Space Mono',monospace;letter-spacing:1px;
+    }
+    .ap-logs {
+      background:rgba(255,215,0,0.02);
+      border:0.5px solid rgba(255,215,0,0.08);
+      border-radius:3px;padding:8px;
+      max-height:130px;overflow-y:auto;
+      scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.08) transparent;
+    }
+    .ap-logs::-webkit-scrollbar { width:2px; }
+    .ap-logs::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.08); }
+    .ap-log-entry {
+      font-family:'Space Mono',monospace;font-size:9px;
+      color:rgba(255,255,255,0.4);line-height:1.8;
+      border-bottom:0.5px solid rgba(255,215,0,0.04);
+      padding-bottom:2px;margin-bottom:2px;
+    }
+    .ap-log-entry:last-child { border-bottom:none;margin-bottom:0; }
+    .ap-log-time { color:rgba(255,215,0,0.28);margin-right:6px; }
 
     /* ── Tooltip (LOI 4 — source + confidence visibles) ── */
     #planet-tooltip {
@@ -126,12 +212,13 @@
     .tt-status-dot.active { background:#4CAF50;box-shadow:0 0 6px #4CAF50; }
 
     /* ── Bottom Bar ── */
+    /* MODIFIED — width adapté au panel 260px */
     #bottombar {
       position:fixed;bottom:20px;
       left:50%;transform:translateX(-50%);
       display:flex;flex-direction:column;align-items:center;gap:10px;
       z-index:20;
-      width:min(800px,calc(100vw - 360px));
+      width:min(800px,calc(100vw - 290px));
     }
     .bar-pill {
       width:100%;
@@ -314,6 +401,51 @@
   </div>
 </div>
 
+<!-- MODIFIED — Left Panel Agent Detail View -->
+<div id="agent-panel">
+  <div class="ap-header">
+    <div>
+      <div class="ap-agent-name" id="ap-name">—</div>
+      <div class="ap-status" id="ap-status">VEILLE</div>
+    </div>
+    <button class="ap-close" id="ap-close" title="Fermer">✕</button>
+  </div>
+  <div class="ap-divider"></div>
+  <div class="ap-body">
+    <div class="ap-section">
+      <div class="ap-section-title">RÔLE</div>
+      <div class="ap-section-value" id="ap-role">Non assigné</div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">TÂCHE EN COURS</div>
+      <div class="ap-section-value" id="ap-task">En attente</div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">CONFIDENCE</div>
+      <div class="ap-conf-track">
+        <div class="ap-conf-fill" id="ap-conf-fill" style="width:0%"></div>
+      </div>
+      <div class="ap-conf-pct" id="ap-conf-pct">0%</div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">SOURCE</div>
+      <div class="ap-section-value" id="ap-source">—</div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">LIMITE</div>
+      <div class="ap-section-value" id="ap-limit" style="color:rgba(255,100,100,0.6)">—</div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">LOGS RÉCENTS</div>
+      <div class="ap-logs" id="ap-logs">
+        <div class="ap-log-entry">
+          <span class="ap-log-time">--:--</span>Aucun log disponible
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Tooltip (LOI 4 — zéro black box) -->
 <div id="planet-tooltip">
   <div class="tt-header">
@@ -404,7 +536,7 @@ let W, H, CX, CY, UNIT;
 function resize() {
   W = canvas.width  = window.innerWidth;
   H = canvas.height = window.innerHeight;
-  CX   = W * 0.42;
+  CX   = W * 0.35; /* MODIFIED — recentrage gauche */
   CY   = H * 0.50;
   UNIT = Math.min(W, H) * 0.078;
   initStars();
@@ -513,7 +645,8 @@ const AGENTS = [
     role:'Scout / Recherche Web 24/7',
     source:'Serper API — google.serper.dev',
     limit:'Ne décide pas — collecte et rapporte uniquement',
-    orbitMul:1.15, sizeMul:0.9, speed:0.0200, phase:0.5,
+    /* MODIFIED — orbitMul * 1.2 (+20%) */
+    orbitMul:1.38, sizeMul:0.9, speed:0.0200, phase:0.5,
     col:{ light:'#E0E0E0',mid:'#9E9E9E',dark:'#404040',base:'#707070',rim:'rgba(220,220,220,0.06)' },
     dotColor:'#9E9E9E', texture:'cratered',
     confidence:0, currentTask:'',
@@ -523,7 +656,7 @@ const AGENTS = [
     role:'Vérification / Scoring / Red flags',
     source:'Groq LLM + règles déterministes',
     limit:'Ne négocie pas — évalue et signale uniquement',
-    orbitMul:1.65, sizeMul:1.3, speed:0.0145, phase:1.1,
+    orbitMul:1.98, sizeMul:1.3, speed:0.0145, phase:1.1,
     col:{ light:'#FFE680',mid:'#D4A800',dark:'#6B5200',base:'#B08A00',rim:'rgba(255,220,0,0.10)' },
     dotColor:'#D4A800', texture:'venusian',
     confidence:0, currentTask:'',
@@ -533,7 +666,7 @@ const AGENTS = [
     role:'Stratégie / Patterns / Weekly Reports',
     source:'ILM + DECISIONS_LOG + Groq LLM',
     limit:'Ne décide pas souverainement — recommande uniquement',
-    orbitMul:2.20, sizeMul:1.35, speed:0.0118, phase:2.3,
+    orbitMul:2.64, sizeMul:1.35, speed:0.0118, phase:2.3,
     col:{ light:'#7EC8FF',mid:'#1976D2',dark:'#0D2B5E',base:'#0F3460',rim:'rgba(50,150,255,0.10)' },
     dotColor:'#1976D2', texture:'earth',
     confidence:0, currentTask:'',
@@ -543,7 +676,7 @@ const AGENTS = [
     role:'CRM / Emails / Diplomatie',
     source:'INVESTORS_CRM + Groq LLM (style Ibrahim ILM)',
     limit:'Ne ferme pas de deal — rédige et suit uniquement',
-    orbitMul:2.85, sizeMul:1.1, speed:0.0096, phase:4.1,
+    orbitMul:3.42, sizeMul:1.1, speed:0.0096, phase:4.1,
     col:{ light:'#FF8A65',mid:'#E53935',dark:'#6A0000',base:'#B71C1C',rim:'rgba(255,80,40,0.08)' },
     dotColor:'#E53935', texture:'mars',
     confidence:0, currentTask:'',
@@ -553,7 +686,7 @@ const AGENTS = [
     role:'Budget / Plafonds / Validation paiements',
     source:'ILM + plafonds.json + DECISIONS_LOG',
     limit:'Ne transfère pas — valide uniquement sous plafond',
-    orbitMul:3.75, sizeMul:2.2, speed:0.0072, phase:0.9,
+    orbitMul:4.50, sizeMul:2.2, speed:0.0072, phase:0.9,
     col:{ light:'#FFD180',mid:'#E65100',dark:'#3E1700',base:'#BF360C',rim:'rgba(255,150,50,0.09)' },
     dotColor:'#E65100', texture:'jupiter',
     confidence:0, currentTask:'',
@@ -563,7 +696,7 @@ const AGENTS = [
     role:'Juridique universel — tous pays / tous droits',
     source:'Base 8 juridictions + Zaeer web + ILM',
     limit:'Ne signe pas — analyse et alerte uniquement',
-    orbitMul:4.70, sizeMul:1.9, speed:0.0055, phase:2.8,
+    orbitMul:5.64, sizeMul:1.9, speed:0.0055, phase:2.8,
     col:{ light:'#FFE599',mid:'#C8A400',dark:'#5C4400',base:'#8B6914',rim:'rgba(255,220,100,0.08)' },
     dotColor:'#C8A400', texture:'saturn', hasRings:true,
     confidence:0, currentTask:'',
@@ -573,7 +706,7 @@ const AGENTS = [
     role:'Créativité / Wild cards / Angles inattendus',
     source:'Groq LLM (température haute) + ILM',
     limit:'Ne publie pas seul — soumet toujours à Ibrahim',
-    orbitMul:5.55, sizeMul:1.6, speed:0.0040, phase:5.5,
+    orbitMul:6.66, sizeMul:1.6, speed:0.0040, phase:5.5,
     col:{ light:'#A7FFEB',mid:'#00BCD4',dark:'#00363A',base:'#006064',rim:'rgba(0,200,210,0.09)' },
     dotColor:'#00BCD4', texture:'uranus',
     confidence:0, currentTask:'',
@@ -583,7 +716,7 @@ const AGENTS = [
     role:'Code / Architecture / Deploy',
     source:'Groq LLM + git + HuggingFace Spaces',
     limit:'Pas de mise en prod sans Ibrahim',
-    orbitMul:6.30, sizeMul:1.55, speed:0.0030, phase:3.7,
+    orbitMul:7.56, sizeMul:1.55, speed:0.0030, phase:3.7,
     col:{ light:'#82B1FF',mid:'#1565C0',dark:'#0A1B4A',base:'#0D47A1',rim:'rgba(80,130,255,0.10)' },
     dotColor:'#1565C0', texture:'neptune',
     confidence:0, currentTask:'',
@@ -610,7 +743,7 @@ AGENTS.forEach(ag => {
 
 // ── Sun ─────────────────────────────────────────────────────
 function drawSun(t) {
-  const r = UNIT * 1.1;
+  const r = UNIT * 1.4; /* MODIFIED — rayon 22→28 (+27%) */
   // Outer glow layers
   [3.5,2.8,2.1].forEach((mul,i) => {
     const g = ctx.createRadialGradient(CX,CY,r*0.8,CX,CY,r*mul);
@@ -900,8 +1033,98 @@ function drawMiniSun() {
   c.beginPath(); c.arc(12,12,11,0,Math.PI*2); c.fillStyle=g; c.fill();
 }
 
-// ── Click → 3 shockwaves ─────────────────────────────────────
+// ── Left Panel — Agent Detail View MODIFIED ──────────────────
+let agentPanelOpen   = false;
+let agentPanelTarget = null;
+const AGENT_LOGS     = {}; // {agentId: [{time, text}]}
+
+const agentDefaults = {
+  name:'Non identifié', dotColor:'var(--gold)',
+  role:'Non assigné', currentTask:'En attente',
+  source:'—', limit:'—', confidence:0, active:false, id:'unknown',
+};
+
+function openAgentPanel(ag) {
+  const data = ag || agentDefaults;
+  const pct  = Math.round((data.confidence || 0) * 100);
+  const barColor = pct >= 70 ? '#4CAF50' : pct >= 40 ? '#FFD700' : '#ff6b6b';
+
+  document.getElementById('ap-name').textContent         = data.name.toUpperCase();
+  document.getElementById('ap-name').style.color         = data.dotColor || 'var(--gold)';
+  document.getElementById('ap-status').textContent       = data.active ? 'ACTIF' : 'VEILLE';
+  document.getElementById('ap-status').className         = 'ap-status' + (data.active ? ' active' : '');
+  document.getElementById('ap-role').textContent         = data.role        || agentDefaults.role;
+  document.getElementById('ap-task').textContent         = data.currentTask || agentDefaults.currentTask;
+  document.getElementById('ap-source').textContent       = data.source      || '—';
+  document.getElementById('ap-limit').textContent        = data.limit       || '—';
+  document.getElementById('ap-conf-fill').style.width      = pct + '%';
+  document.getElementById('ap-conf-fill').style.background = barColor;
+  document.getElementById('ap-conf-pct').textContent       = pct + '%';
+
+  // Logs
+  const logs  = AGENT_LOGS[data.id] || [];
+  const logsEl = document.getElementById('ap-logs');
+  logsEl.innerHTML = logs.length
+    ? logs.slice(-10).reverse().map(l =>
+        `<div class="ap-log-entry"><span class="ap-log-time">${l.time}</span>${l.text}</div>`
+      ).join('')
+    : '<div class="ap-log-entry"><span class="ap-log-time">--:--</span>Aucun log disponible</div>';
+
+  document.getElementById('agent-panel').classList.add('open');
+  agentPanelOpen   = true;
+  agentPanelTarget = data;
+}
+
+function closeAgentPanel() {
+  document.getElementById('agent-panel').classList.remove('open');
+  agentPanelOpen   = false;
+  agentPanelTarget = null;
+}
+
+function pushAgentLog(agentId, text) {
+  if (!AGENT_LOGS[agentId]) AGENT_LOGS[agentId] = [];
+  const now = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  AGENT_LOGS[agentId].unshift({ time: now, text: text.substring(0, 60) });
+  if (AGENT_LOGS[agentId].length > 20) AGENT_LOGS[agentId].pop();
+  // Rafraîchir le panel si ouvert sur cet agent
+  if (agentPanelOpen && agentPanelTarget?.id === agentId) openAgentPanel(agentPanelTarget);
+}
+
+// Close button + Escape
+document.getElementById('ap-close').addEventListener('click', closeAgentPanel);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && agentPanelOpen) closeAgentPanel();
+  // Ctrl+R — toggle panel droit visible/hidden
+  if (e.key === 'r' && e.ctrlKey) {
+    e.preventDefault();
+    const p = document.getElementById('panel');
+    p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+  }
+});
+
+// ── Click → planète = panel gauche / canvas = shockwave MODIFIED
 canvas.addEventListener('click', e => {
+  const mx = e.clientX, my = e.clientY;
+
+  // Hit-test planètes
+  let clicked = null;
+  for (const ag of AGENTS) {
+    if (Math.hypot(mx - ag.x, my - ag.y) < ag.r + 14) { clicked = ag; break; }
+  }
+
+  if (clicked) {
+    openAgentPanel(clicked);
+    return; // pas de shockwave sur clic planète
+  }
+
+  // Clic hors panel gauche → fermeture
+  if (agentPanelOpen) {
+    const rect = document.getElementById('agent-panel').getBoundingClientRect();
+    if (mx < rect.left || mx > rect.right || my < rect.top || my > rect.bottom) {
+      closeAgentPanel();
+    }
+  }
+
   addShockwave(CX, CY);
 });
 
@@ -966,9 +1189,10 @@ function setAgentStatus(agentId, status) {
     dot.style.background=ag.dotColor;
     dot.style.boxShadow =`0 0 8px ${ag.dotColor}`;
     ag.active=true; ag.pulse=0.9;
-    ag.bounce=1; // micro-bounce (LOI 4 feedback)
+    ag.bounce=1;
     activateStarsNear(ag.x,ag.y,100,2.0);
     activateOrbitStars(ag);
+    pushAgentLog(agentId, 'activation — dispatch PIHI'); /* MODIFIED */
   } else if(status==='ready') {
     dot.style.background=ag.dotColor+'88';
     dot.style.boxShadow =`0 0 4px ${ag.dotColor}44`;
@@ -1080,7 +1304,11 @@ async function sendMessage(message) {
         ag.currentTask=message.substring(0,40)+'…';
       }
       setAgentStatus(agentId,'active');
-      setTimeout(()=>{ setAgentStatus(agentId,'ready'); if(ag) ag.currentTask=''; },3500);
+      if(ag) pushAgentLog(agentId, `tâche: ${message.substring(0,50)}`); /* MODIFIED */
+      setTimeout(()=>{
+        setAgentStatus(agentId,'ready');
+        if(ag){ ag.currentTask=''; pushAgentLog(agentId,'réponse envoyée'); }
+      },3500);
     }
     addShockwave(CX,CY);
     if(data.pihi==='blocked') {
