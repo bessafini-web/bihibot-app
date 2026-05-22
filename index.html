@@ -671,15 +671,27 @@ function speak(text, lang) {
 
 const micBtn=document.getElementById('mic-btn'); let micActive=false,sr=null;
 const langMap={fr:'fr-FR',dr:'fr-MA',ar:'ar-MA'};
-micBtn.addEventListener('click',()=>{
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){addMessage('PIHI','WebSpeech non disponible dans ce navigateur.');return;}
-  if(micActive){sr&&sr.stop();return;}
-  sr=new SR(); sr.lang=langMap[currentLang]||'fr-FR'; sr.interimResults=true; sr.continuous=false;
-  sr.onresult=e=>{let interim='',final='';for(const r of e.results){if(r.isFinal)final+=r[0].transcript;else interim+=r[0].transcript;}input.value=final||interim;};
-  sr.onend=()=>{micActive=false;micBtn.classList.remove('active');if(input.value.trim())handleSend();};
-  sr.onerror=()=>{micActive=false;micBtn.classList.remove('active');};
-  sr.start(); micActive=true; micBtn.classList.add('active');
+micBtn.addEventListener('click', async () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    // Fallback mobile — demande texte via prompt natif
+    const txt = prompt('🎙 Commande Ibrahim:');
+    if (txt) { input.value = txt; handleSend(); }
+    return;
+  }
+  if (micActive) { sr && sr.stop(); return; }
+  // Demande permission micro explicitement sur mobile
+  try {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch {
+    addMessage('PIHI', 'Accès micro refusé. Active le micro dans les paramètres du navigateur.');
+    return;
+  }
+  sr = new SR(); sr.lang = langMap[currentLang] || 'fr-FR'; sr.interimResults = true; sr.continuous = false;
+  sr.onresult = e => { let interim='', final=''; for (const r of e.results) { if (r.isFinal) final += r[0].transcript; else interim += r[0].transcript; } input.value = final || interim; };
+  sr.onend = () => { micActive = false; micBtn.classList.remove('active'); if (input.value.trim()) handleSend(); };
+  sr.onerror = () => { micActive = false; micBtn.classList.remove('active'); };
+  sr.start(); micActive = true; micBtn.classList.add('active');
 });
 
 const placeholders={fr:'Commande Ibrahim…',dr:'أمر ليبراهيم — دارجة · français · عربي …',ar:'أمر إبراهيم…'};
