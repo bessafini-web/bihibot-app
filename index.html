@@ -460,7 +460,16 @@ function drawTexture(ctx,x,y,r,ag) {
   }
 }
 
-function ringGrad(x,rx) { const g=ctx.createLinearGradient(x-rx,0,x+rx,0); g.addColorStop(0,'rgba(200,160,60,0.15)'); g.addColorStop(0.3,'rgba(240,200,100,0.45)'); g.addColorStop(0.5,'rgba(255,215,0,0.38)'); g.addColorStop(0.7,'rgba(200,160,60,0.40)'); g.addColorStop(1,'rgba(160,120,40,0.15)'); return g; }
+function ringGrad(x, rx) {
+  if (!isFinite(x) || !isFinite(rx) || rx <= 0) return 'rgba(200,160,60,0.3)';
+  const g = ctx.createLinearGradient(x - rx, 0, x + rx, 0);
+  g.addColorStop(0, 'rgba(200,160,60,0.15)');
+  g.addColorStop(0.3, 'rgba(240,200,100,0.45)');
+  g.addColorStop(0.5, 'rgba(255,215,0,0.38)');
+  g.addColorStop(0.7, 'rgba(200,160,60,0.40)');
+  g.addColorStop(1, 'rgba(160,120,40,0.15)');
+  return g;
+}
 function drawRingsBack(x,y,r) { const rx=r*2.25,ry=r*0.52; ctx.save(); ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,Math.PI,0,true); ctx.ellipse(x,y,rx*0.6,ry*0.6,0,0,Math.PI,false); ctx.closePath(); ctx.fillStyle=ringGrad(x,rx); ctx.fill(); ctx.restore(); }
 function drawRingsFront(x,y,r) { const rx=r*2.25,ry=r*0.52; ctx.save(); ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,0,Math.PI); ctx.ellipse(x,y,rx*0.6,ry*0.6,0,Math.PI,0,true); ctx.closePath(); ctx.fillStyle=ringGrad(x,rx); ctx.fill(); ctx.restore(); }
 function drawOrbit(orbitR) { ctx.beginPath(); ctx.arc(CX,CY,orbitR,0,Math.PI*2); ctx.strokeStyle='rgba(255,215,0,0.05)'; ctx.lineWidth=0.7; ctx.stroke(); }
